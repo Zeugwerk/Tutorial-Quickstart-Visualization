@@ -23,6 +23,7 @@ public class PlcService : Node
 	bool _magnetIsOn, _inMagnetZone;
 	bool _pressed;
 	float _disconnectedDt;
+	bool _showException = true;
 
 	private void ConnectPlc()
 	{
@@ -72,7 +73,7 @@ public class PlcService : Node
 		_controlConveyorOn = null;
 		_ads = null;
 
-		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = true;
+		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
 		GetNode<Label>("../MessageLayer/ErrorRect/lblConnectionState").Text =
 			$@"Not connected to local PLC
 This application is designed to interface with the Zeugwerk Quickstart Tutorial.
@@ -109,6 +110,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		GetNode("Rail/TransportX/IsUpLs/Area").Connect("area_entered", this, nameof(_on_IsUpLs_area_entered));
 		GetNode("Rail/TransportX/IsUpLs/Area").Connect("area_exited", this, nameof(_on_IsUpLs_area_exited));		
 		
+		GetNode("../MessageLayer/ErrorRect/btIgnore").Connect("pressed", this, nameof(_ignoreError));
 		GetNode("../GUI/Sequences/Start").Connect("pressed", this, nameof(_start));
 		GetNode("../GUI/Sequences/Stop").Connect("pressed", this, nameof(_stop));
 		GetNode("../GUI/Sequences/GoHome").Connect("pressed", this, nameof(_gohome));
@@ -201,9 +203,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			var cylinderY = transportX.GetNode<RigidBody>("CylinderYRigidBody");
 
 			if (status.Equipment.CylinderYMoveUp.IsEnabled == 0 && status.Equipment.CylinderYMoveDown.IsEnabled > 0)
-				cylinderY.GravityScale = 1;
+				cylinderY.GravityScale = 2;
 			else if (status.Equipment.CylinderYMoveUp.IsEnabled > 0 && status.Equipment.CylinderYMoveDown.IsEnabled == 0)
-				cylinderY.GravityScale = -1;
+				cylinderY.GravityScale = -2;
 
 			// magnetic force on/off
 			_magnetIsOn = status.Equipment.MagnetOn.IsEnabled > 0;
@@ -561,5 +563,11 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 		GD.Print("cube exited magnetic zone");
 		_inMagnetZone = false;
+	}
+	
+	public void _ignoreError()
+	{
+		_showException = false;
+		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
 	}
 }

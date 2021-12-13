@@ -112,7 +112,7 @@ normal_texture = ExtResource( 9 )
 uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 
 [sub_resource type="BoxShape" id=3]
-extents = Vector3( 0.13367, 0.25, 0.550238 )
+extents = Vector3( 0.319312, 0.25, 0.550238 )
 
 [sub_resource type="SpatialMaterial" id=44]
 flags_transparent = true
@@ -331,7 +331,6 @@ margin_left = -136.0
 margin_top = -64.0
 margin_right = -16.0
 margin_bottom = -10.0
-text = "Init"
 align = 2
 valign = 1
 __meta__ = {
@@ -606,7 +605,6 @@ margin_left = -680.0
 margin_top = -64.0
 margin_right = -120.0
 margin_bottom = -12.0
-text = "[Alarming Message]"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -644,6 +642,20 @@ margin_bottom = 300.0
 text = "Reconnecting in 5s ..."
 align = 2
 valign = 1
+
+[node name="btIgnore" type="Button" parent="MessageLayer/ErrorRect"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -96.0
+margin_top = -50.0
+margin_right = -17.0
+margin_bottom = -26.0
+text = "Ignore"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
