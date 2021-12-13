@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/aluminum-scuffed-preview2-3.jpg-767130262b44ad9b9d7b30b219cf2316.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://prototype/Aluminum-Scuffed_bl/aluminum-scuffed-preview2-3.jpg"
+dest_files=[ "res://.import/aluminum-scuffed-preview2-3.jpg-767130262b44ad9b9d7b30b219cf2316.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

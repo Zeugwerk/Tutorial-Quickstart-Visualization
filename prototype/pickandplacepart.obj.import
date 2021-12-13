@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/pickandplacepart.obj-c51c1a806d760e00eebcb9a8976b6a12.mesh"
+
+[deps]
+
+files=[ "res://.import/pickandplacepart.obj-c51c1a806d760e00eebcb9a8976b6a12.mesh" ]
+
+source_file="res://prototype/pickandplacepart.obj"
+dest_files=[ "res://.import/pickandplacepart.obj-c51c1a806d760e00eebcb9a8976b6a12.mesh", "res://.import/pickandplacepart.obj-c51c1a806d760e00eebcb9a8976b6a12.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286

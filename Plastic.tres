@@ -1,0 +1,19 @@
+[gd_resource type="SpatialMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://prototype/plasticpattern1-bl/plasticpattern1-metalness.png" type="Texture" id=1]
+[ext_resource path="res://prototype/plasticpattern1-bl/plasticpattern1-normal2-ogl.png" type="Texture" id=3]
+[ext_resource path="res://prototype/plasticpattern1-bl/plasticpattern1-roughness2.png" type="Texture" id=4]
+
+[resource]
+metallic_texture = ExtResource( 1 )
+roughness = 0.5
+roughness_texture = ExtResource( 4 )
+emission_enabled = true
+emission = Color( 1, 0, 0, 1 )
+emission_energy = 4.0
+emission_operator = 0
+emission_on_uv2 = false
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource( 3 )
+uv1_triplanar = true
