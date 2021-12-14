@@ -87,28 +87,28 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		ConnectPlc();
 
 		_cube = GetNode<RigidBody>("CubeRigidBody");
-		_magnetArea = GetNode("Rail/TransportX/CylinderYRigidBody").GetNode("MagnetArea");
-		_gripper = GetNode("Rail/TransportX/CylinderYRigidBody/Gripper");
+		_magnetArea = GetNode("bxRail/bxTransportX/rbCylinderY").GetNode("MagnetArea");
+		_gripper = GetNode("bxRail/bxTransportX/rbCylinderY/Gripper");
 
 		// Reset Limit switches
 		_on_Right_area_exited(_cube.GetNode<Area>("Area"));
 		_on_Left_area_exited(_cube.GetNode<Area>("Area"));
-		_on_IsDownLs_area_exited(GetNode<Area>("Rail/TransportX/CylinderYRigidBody/GripperUpper/Area"));
-		_on_IsUpLs_area_exited(GetNode<Area>("Rail/TransportX/CylinderYRigidBody/Gripper/Area"));		
+		_on_IsDownLs_area_exited(GetNode<Area>("bxRail/bxTransportX/rbCylinderY/GripperUpper/Area"));
+		_on_IsUpLs_area_exited(GetNode<Area>("bxRail/bxTransportX/rbCylinderY/Gripper/Area"));		
 		
-		GetNode("Rail/TransportX/CylinderYRigidBody/MagnetArea").Connect("area_entered", this, nameof(_enteredMagnet));
-		GetNode("Rail/TransportX/CylinderYRigidBody/MagnetArea").Connect("area_exited", this, nameof(_exitedMagnet));
-		GetNode("ConveyorStaticBody/Area").Connect("area_exited", this, nameof(_resetCube));
+		GetNode("bxRail/bxTransportX/rbCylinderY/MagnetArea").Connect("area_entered", this, nameof(_enteredMagnet));
+		GetNode("bxRail/bxTransportX/rbCylinderY/MagnetArea").Connect("area_exited", this, nameof(_exitedMagnet));
+		GetNode("stConveyor/Area").Connect("area_exited", this, nameof(_resetCube));
 		
 		GetNode("Right").Connect("area_entered", this, nameof(_on_Right_area_entered));
 		GetNode("Right").Connect("area_exited", this, nameof(_on_Right_area_exited));
 		GetNode("Left").Connect("area_entered", this, nameof(_on_Left_area_entered));
 		GetNode("Left").Connect("area_exited", this, nameof(_on_Left_area_exited));
 		
-		GetNode("Rail/TransportX/IsDownLs/Area").Connect("area_entered", this, nameof(_on_IsDownLs_area_entered));
-		GetNode("Rail/TransportX/IsDownLs/Area").Connect("area_exited", this, nameof(_on_IsDownLs_area_exited));
-		GetNode("Rail/TransportX/IsUpLs/Area").Connect("area_entered", this, nameof(_on_IsUpLs_area_entered));
-		GetNode("Rail/TransportX/IsUpLs/Area").Connect("area_exited", this, nameof(_on_IsUpLs_area_exited));		
+		GetNode("bxRail/bxTransportX/IsDownLs/Area").Connect("area_entered", this, nameof(_on_IsDownLs_area_entered));
+		GetNode("bxRail/bxTransportX/IsDownLs/Area").Connect("area_exited", this, nameof(_on_IsDownLs_area_exited));
+		GetNode("bxRail/bxTransportX/IsUpLs/Area").Connect("area_entered", this, nameof(_on_IsUpLs_area_entered));
+		GetNode("bxRail/bxTransportX/IsUpLs/Area").Connect("area_exited", this, nameof(_on_IsUpLs_area_exited));		
 		
 		GetNode("../MessageLayer/ErrorRect/btIgnore").Connect("pressed", this, nameof(_ignoreError));
 		GetNode("../GUI/Sequences/Start").Connect("pressed", this, nameof(_start));
@@ -125,11 +125,23 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		GetNode("../GUI/Equipment/ConveyorOn").Connect("pressed", this, nameof(_conveyorOn));
 		GetNode("../GUI/Equipment/ConveyorOff").Connect("pressed", this, nameof(_conveyorOff));
 		GetNode("../GUI/Game/ResetCube").Connect("pressed", this, nameof(_resetCube_pressed));
+		GetNode("../GUI/Game/ToggleOverlay").Connect("pressed", this, nameof(_toggleOverlay));
 	}
 
-	//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
+		GetNode<ColorRect>("../Overlay/ColorRect/crLeft").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<Area>("Left").GlobalTransform.origin);
+		GetNode<ColorRect>("../Overlay/ColorRect/crRight").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<Area>("Right").GlobalTransform.origin);
+		GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<StaticBody>("stConveyor").GlobalTransform.origin);
+		GetNode<ColorRect>("../Overlay/ColorRect/crTransport").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<CSGBox>("bxRail/bxTransportX").GlobalTransform.origin);
+		GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<CSGBox>("bxRail/bxTransportX/rbCylinderY/Gripper").GlobalTransform.origin);
+		GetNode<ColorRect>("../Overlay/ColorRect/crLeft").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crLeft").RectPosition.x - 120, GetNode<ColorRect>("../Overlay/ColorRect/crLeft").RectPosition.y+30);
+		GetNode<ColorRect>("../Overlay/ColorRect/crRight").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crRight").RectPosition.x, GetNode<ColorRect>("../Overlay/ColorRect/crRight").RectPosition.y+30);
+		GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition.x - 60, GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition.y+30);
+		GetNode<ColorRect>("../Overlay/ColorRect/crTransport").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crTransport").RectPosition.x - 60, GetNode<ColorRect>("../Overlay/ColorRect/crTransport").RectPosition.y-60);
+		GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition.x - 60, GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition.y-30);
+
 		if (_ads == null)
 		{
 			GetNode<Label>("../MessageLayer/ErrorRect/lbReconnect").Text = string.Format("Reconnecting in {0}s", (int)(5-_disconnectedDt));
@@ -162,7 +174,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			GetNode<Label>("../GUI/lbMessage").Text = "";
 			
 		// Update equipment state
-		StaticBody conveyorStaticBody = GetNode<StaticBody>("ConveyorStaticBody");
+		StaticBody conveyorStaticBody = GetNode<StaticBody>("stConveyor");
 		if(conveyorStaticBody.ConstantLinearVelocity.x > 0)
 		{
 			var mat = conveyorStaticBody.GetNode<CSGBox>("CSGBox").Material as SpatialMaterial;
@@ -184,7 +196,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.IsEnabled > 0 ? colorOn : colorOff;
 			GetNode<ColorRect>("../GUI/Equipment/crConveyor").Color = status.Equipment.ConveyorOn.IsEnabled > 0 ? colorOn : colorOff;
 			
-			GetNode("ConveyorStaticBody/Area").SetBlockSignals(status.State == PLC.Enums.ZApplication_UnitStateMachineState.Gohome);
+			GetNode("stConveyor/Area").SetBlockSignals(status.State == PLC.Enums.ZApplication_UnitStateMachineState.Gohome);
 			if (status.State == PLC.Enums.ZApplication_UnitStateMachineState.Idle && _stateMem == PLC.Enums.ZApplication_UnitStateMachineState.Gohome)
 				_resetCube();
 
@@ -196,11 +208,11 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			_dt = 0;
 
 			// transport axis
-			CSGBox transportX = GetNode("Rail").GetNode<CSGBox>("TransportX");
+			CSGBox transportX = GetNode("bxRail").GetNode<CSGBox>("bxTransportX");
 			transportX.Translation = new Vector3((float)status.Equipment.TransportX.Position.ActPosition, transportX.Translation.y, transportX.Translation.z);
 
 			// vertical cylinder
-			var cylinderY = transportX.GetNode<RigidBody>("CylinderYRigidBody");
+			var cylinderY = transportX.GetNode<RigidBody>("rbCylinderY");
 
 			if (status.Equipment.CylinderYMoveUp.IsEnabled == 0 && status.Equipment.CylinderYMoveDown.IsEnabled > 0)
 				cylinderY.GravityScale = 2;
@@ -209,7 +221,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 			// magnetic force on/off
 			_magnetIsOn = status.Equipment.MagnetOn.IsEnabled > 0;
-			GetNode("ConveyorStaticBody/Area").SetBlockSignals(true);
+			GetNode("stConveyor/Area").SetBlockSignals(true);
 			GetNode("Right").SetBlockSignals(true);
 			GetNode("Left").SetBlockSignals(true);
 			GetNode("Left").SetBlockSignals(true);
@@ -233,9 +245,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 						_cube.Rotation = new Vector3(0, 0, 0);
 
 						// Set Collision Geometry to gripper + cube
-						GetNode<CollisionShape>("Rail/TransportX/CylinderYRigidBody/GripperCollisionShape").Translation 
+						GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Translation 
 							= new Vector3(((CSGBox)(_gripper)).Translation.x, ((CSGBox)(_gripper)).Translation.y - 0.5f * cubeHeight, ((CSGBox)(_gripper)).Translation.z);
-						((BoxShape)(GetNode<CollisionShape>("Rail/TransportX/CylinderYRigidBody/GripperCollisionShape").Shape)).Extents =
+						((BoxShape)(GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Shape)).Extents =
 							new Vector3(((CSGBox)(_gripper)).Width / 2, 0.5f * (((CSGBox)(_gripper)).Height + cubeHeight), ((CSGBox)(_gripper)).Depth / 2);
 					}
 				}
@@ -256,13 +268,13 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 					_cube.Transform = transform;
 					
 					// Set Collision Geometry to gripper
-					GetNode<CollisionShape>("Rail/TransportX/CylinderYRigidBody/GripperCollisionShape").Translation = ((CSGBox)(_gripper)).Translation;
-					((BoxShape)(GetNode<CollisionShape>("Rail/TransportX/CylinderYRigidBody/GripperCollisionShape")).Shape).Extents =
+					GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Translation = ((CSGBox)(_gripper)).Translation;
+					((BoxShape)(GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape")).Shape).Extents =
 						new Vector3(0.25f, 0.025f, 0.25f);
 				}
 			}
 			
-			GetNode("ConveyorStaticBody/Area").SetBlockSignals(false);
+			GetNode("stConveyor/Area").SetBlockSignals(false);
 			GetNode("Right").SetBlockSignals(false);
 			GetNode("Left").SetBlockSignals(false);
 			GetNode("Left").SetBlockSignals(false);
@@ -347,38 +359,38 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 	public void _on_IsDownLs_area_entered(Area area)
 	{
-		if (area != GetNode("Rail/TransportX/CylinderYRigidBody/GripperUpper/Area")) return;	
+		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/GripperUpper/Area")) return;	
 		
 		GD.Print("is down entered")	;
-		ToggleAreaBox(GetNode<CSGBox>("Rail/TransportX/IsDownLs"), on: true, sym: _controlIsDownLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: true, sym: _controlIsDownLs);
 	}
 
 	public void _on_IsDownLs_area_exited(Area area)
 	{
-		if (area != GetNode("Rail/TransportX/CylinderYRigidBody/GripperUpper/Area")) return;		
+		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/GripperUpper/Area")) return;		
 		
 		GD.Print("is down exited")	;
 		
-		ToggleAreaBox(GetNode<CSGBox>("Rail/TransportX/IsDownLs"), on: false, sym: _controlIsDownLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: false, sym: _controlIsDownLs);
 	}
 	
 	public void _on_IsUpLs_area_entered(Area area)
 	{
-		if (area != GetNode("Rail/TransportX/CylinderYRigidBody/Gripper/Area")) return;
+		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/Gripper/Area")) return;
 		
 		GD.Print("is up entered")	;
 
 		
-		ToggleAreaBox(GetNode<CSGBox>("Rail/TransportX/IsUpLs"), on: true, sym: _controlIsUpLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: true, sym: _controlIsUpLs);
 	}
 
 	public void _on_IsUpLs_area_exited(Area area)
 	{
-		if (area != GetNode("Rail/TransportX/CylinderYRigidBody/Gripper/Area")) return;	
+		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/Gripper/Area")) return;	
 		
 		GD.Print("is up exited")	;
 			
-		ToggleAreaBox(GetNode<CSGBox>("Rail/TransportX/IsUpLs"), on: false, sym: _controlIsUpLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: false, sym: _controlIsUpLs);
 	}
 
 	public void _moveup()
@@ -570,4 +582,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		_showException = false;
 		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
 	}
+	
+	public void _toggleOverlay()
+	{
+		GetNode<ColorRect>("../Overlay/ColorRect").Visible = !GetNode<ColorRect>("../Overlay/ColorRect").Visible;
+	}	
 }

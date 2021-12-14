@@ -129,38 +129,38 @@ emission_on_uv2 = false
 [node name="Node" type="Node" parent="."]
 script = ExtResource( 1 )
 
-[node name="ConveyorStaticBody" type="StaticBody" parent="Node"]
+[node name="stConveyor" type="StaticBody" parent="Node"]
 constant_linear_velocity = Vector3( 0.5, 0, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/ConveyorStaticBody"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/stConveyor"]
 shape = SubResource( 1 )
 
-[node name="CSGBox" type="CSGBox" parent="Node/ConveyorStaticBody"]
+[node name="CSGBox" type="CSGBox" parent="Node/stConveyor"]
 width = 7.0
 height = 0.1
 depth = 1.0
 material = SubResource( 32 )
 
-[node name="Area" type="Area" parent="Node/ConveyorStaticBody"]
+[node name="Area" type="Area" parent="Node/stConveyor"]
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/ConveyorStaticBody/Area"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/stConveyor/Area"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.759543, 0 )
 shape = SubResource( 13 )
 
-[node name="Rail" type="CSGBox" parent="Node"]
+[node name="bxRail" type="CSGBox" parent="Node"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.66705, 0 )
 width = 7.0
 height = 0.3
 depth = 0.05
 material = ExtResource( 3 )
 
-[node name="TransportX" type="CSGBox" parent="Node/Rail"]
+[node name="bxTransportX" type="CSGBox" parent="Node/bxRail"]
 width = 0.5
 height = 0.5
 depth = 0.2
 material = SubResource( 29 )
 
-[node name="CylinderYRigidBody" type="RigidBody" parent="Node/Rail/TransportX"]
+[node name="rbCylinderY" type="RigidBody" parent="Node/bxRail/bxTransportX"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0689385, 0.105835 )
 collision_layer = 4
 collision_mask = 3
@@ -172,98 +172,98 @@ axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
 
-[node name="CSGBox2" type="CSGBox" parent="Node/Rail/TransportX/CylinderYRigidBody"]
+[node name="CSGBox2" type="CSGBox" parent="Node/bxRail/bxTransportX/rbCylinderY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0526724, 0 )
 width = 0.252899
 height = 1.39394
 depth = 0.06416
 material = SubResource( 30 )
 
-[node name="CollisionShape2" type="CollisionShape" parent="Node/Rail/TransportX/CylinderYRigidBody"]
+[node name="CollisionShape2" type="CollisionShape" parent="Node/bxRail/bxTransportX/rbCylinderY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0 )
 shape = SubResource( 8 )
 
-[node name="GripperUpper" type="CSGBox" parent="Node/Rail/TransportX/CylinderYRigidBody"]
+[node name="GripperUpper" type="CSGBox" parent="Node/bxRail/bxTransportX/rbCylinderY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0 )
 width = 0.3
 height = 0.04
 depth = 0.3
 material = SubResource( 31 )
 
-[node name="Area" type="Area" parent="Node/Rail/TransportX/CylinderYRigidBody/GripperUpper"]
+[node name="Area" type="Area" parent="Node/bxRail/bxTransportX/rbCylinderY/GripperUpper"]
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/Rail/TransportX/CylinderYRigidBody/GripperUpper/Area"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/bxRail/bxTransportX/rbCylinderY/GripperUpper/Area"]
 shape = SubResource( 45 )
 
-[node name="MagnetArea" type="Area" parent="Node/Rail/TransportX/CylinderYRigidBody"]
+[node name="MagnetArea" type="Area" parent="Node/bxRail/bxTransportX/rbCylinderY"]
 gravity_vec = Vector3( 0, 1, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/Rail/TransportX/CylinderYRigidBody/MagnetArea"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/bxRail/bxTransportX/rbCylinderY/MagnetArea"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00169399, -0.850586, 0.00590832 )
 shape = SubResource( 10 )
 
-[node name="GripperCollisionShape" type="CollisionShape" parent="Node/Rail/TransportX/CylinderYRigidBody"]
+[node name="GripperCollisionShape" type="CollisionShape" parent="Node/bxRail/bxTransportX/rbCylinderY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0 )
 shape = SubResource( 14 )
 
-[node name="Gripper" type="CSGBox" parent="Node/Rail/TransportX/CylinderYRigidBody"]
+[node name="Gripper" type="CSGBox" parent="Node/bxRail/bxTransportX/rbCylinderY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0 )
 width = 0.45
 height = 0.0496931
 depth = 0.3
 material = ExtResource( 14 )
 
-[node name="Area" type="Area" parent="Node/Rail/TransportX/CylinderYRigidBody/Gripper"]
+[node name="Area" type="Area" parent="Node/bxRail/bxTransportX/rbCylinderY/Gripper"]
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/Rail/TransportX/CylinderYRigidBody/Gripper/Area"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/bxRail/bxTransportX/rbCylinderY/Gripper/Area"]
 shape = SubResource( 45 )
 
-[node name="IsDownLs" type="CSGBox" parent="Node/Rail/TransportX"]
+[node name="IsDownLs" type="CSGBox" parent="Node/bxRail/bxTransportX"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.183766, 0.263002, 0.034 )
 width = 0.1
 height = 0.0188159
 depth = 0.001
 material = SubResource( 46 )
 
-[node name="Area" type="Area" parent="Node/Rail/TransportX/IsDownLs"]
+[node name="Area" type="Area" parent="Node/bxRail/bxTransportX/IsDownLs"]
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/Rail/TransportX/IsDownLs/Area"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/bxRail/bxTransportX/IsDownLs/Area"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0144389, 0.0405548, 0 )
 shape = SubResource( 47 )
 
-[node name="IsUpLs" type="CSGBox" parent="Node/Rail/TransportX"]
+[node name="IsUpLs" type="CSGBox" parent="Node/bxRail/bxTransportX"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.26, 0.034 )
 width = 0.1
 height = 0.0279896
 depth = 0.001
 material = SubResource( 48 )
 
-[node name="Area" type="Area" parent="Node/Rail/TransportX/IsUpLs"]
+[node name="Area" type="Area" parent="Node/bxRail/bxTransportX/IsUpLs"]
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/Rail/TransportX/IsUpLs/Area"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/bxRail/bxTransportX/IsUpLs/Area"]
 shape = SubResource( 49 )
 
-[node name="StaticBody" type="StaticBody" parent="Node/Rail"]
+[node name="StaticBody" type="StaticBody" parent="Node/bxRail"]
 
-[node name="CollisionShape2" type="CollisionShape" parent="Node/Rail/StaticBody"]
+[node name="CollisionShape2" type="CollisionShape" parent="Node/bxRail/StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 0 )
 shape = SubResource( 41 )
 
-[node name="CollisionShape3" type="CollisionShape" parent="Node/Rail/StaticBody"]
+[node name="CollisionShape3" type="CollisionShape" parent="Node/bxRail/StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0 )
 shape = SubResource( 41 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Node/Rail/StaticBody"]
+[node name="CollisionShape" type="CollisionShape" parent="Node/bxRail/StaticBody"]
 shape = SubResource( 42 )
 
-[node name="CSGBox2" type="CSGBox" parent="Node/Rail"]
+[node name="CSGBox2" type="CSGBox" parent="Node/bxRail"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 0 )
 width = 0.0801806
 height = 0.35
 depth = 0.15
 material = ExtResource( 3 )
 
-[node name="CSGBox3" type="CSGBox" parent="Node/Rail"]
+[node name="CSGBox3" type="CSGBox" parent="Node/bxRail"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0 )
 width = 0.0801806
 height = 0.35
@@ -320,6 +320,129 @@ height = 0.5
 depth = 0.95
 material = SubResource( 44 )
 
+[node name="Overlay" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Overlay"]
+anchor_right = 0.992
+anchor_bottom = 1.0
+margin_right = 8.19196
+color = Color( 1, 1, 1, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="crLeft" type="ColorRect" parent="Overlay/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 64.0
+margin_top = 440.0
+margin_right = -840.0
+margin_bottom = -128.0
+color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Overlay" type="Label" parent="Overlay/ColorRect/crLeft"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Left limitswitch"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="crRight" type="ColorRect" parent="Overlay/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 808.0
+margin_top = 480.0
+margin_right = -96.0
+margin_bottom = -88.0
+color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Overlay" type="Label" parent="Overlay/ColorRect/crRight"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Right limitswitch"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="crConveyor" type="ColorRect" parent="Overlay/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 408.0
+margin_top = 456.0
+margin_right = -496.0
+margin_bottom = -112.0
+color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Overlay" type="Label" parent="Overlay/ColorRect/crConveyor"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 60, 0 )
+text = "Conveyor"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="crTransport" type="ColorRect" parent="Overlay/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 416.0
+margin_top = 192.0
+margin_right = -488.0
+margin_bottom = -360.0
+color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Overlay" type="Label" parent="Overlay/ColorRect/crTransport"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "TransportX
+CylinderY"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="crMagnet" type="ColorRect" parent="Overlay/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 424.0
+margin_top = 352.0
+margin_right = -480.0
+margin_bottom = -216.0
+color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Overlay" type="Label" parent="Overlay/ColorRect/crMagnet"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Magnet"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="lblUnitState" type="Label" parent="GUI"]
@@ -341,7 +464,7 @@ __meta__ = {
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 152.0
-margin_bottom = 80.0
+margin_bottom = 112.0
 color = Color( 0, 0, 0, 0.588235 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -359,11 +482,21 @@ __meta__ = {
 }
 
 [node name="ResetCube" type="Button" parent="GUI/Game"]
-margin_left = 24.0
+margin_left = 16.0
 margin_top = 32.0
-margin_right = 107.0
+margin_right = 120.0
 margin_bottom = 52.0
 text = "Reset cube"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ToggleOverlay" type="Button" parent="GUI/Game"]
+margin_left = 16.0
+margin_top = 56.0
+margin_right = 122.0
+margin_bottom = 76.0
+text = "Toggle overlay"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -602,9 +735,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -680.0
-margin_top = -64.0
+margin_top = -80.0
 margin_right = -120.0
-margin_bottom = -12.0
+margin_bottom = -28.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -662,9 +795,10 @@ __meta__ = {
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = -88.0
-margin_right = 408.0
-margin_bottom = -5.0
+margin_left = 16.0
+margin_top = -96.0
+margin_right = 424.0
+margin_bottom = -13.0
 texture = ExtResource( 4 )
 expand = true
 stretch_mode = 5
