@@ -27,12 +27,19 @@ public class PlcService : Node
 
 	private void ConnectPlc()
 	{
+		var netId = GetNode<LineEdit>("../MessageLayer/ErrorRect/leAmsNetId").Text;
+		GD.Print($"Trying to connect to PLC {netId}");
+		
 		try
 		{
 			_disconnectedDt = 0;
-			
 			_ads = new TcAdsClient();
-			_ads.Connect(851);
+
+			if(netId == "")
+				_ads.Connect(851);			
+			else
+				_ads.Connect(netId, 851);
+				
 			_alarmingSymbol = _ads.ReadSymbolInfo("ZGlobal.Com.Alarming.publish");
 			_statusSymbol = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.publish");
 			_controlRequest = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Request");
@@ -76,9 +83,7 @@ public class PlcService : Node
 		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
 		GetNode<Label>("../MessageLayer/ErrorRect/lblConnectionState").Text =
 			$@"Not connected to local PLC
-This application is designed to interface with the Zeugwerk Quickstart Tutorial.
-
-{ex?.ToString()}";
+This application is designed to interface with the Zeugwerk Quickstart Tutorial.";
 	}
 
 	// Called when the node enters the scene tree for the first time.git
@@ -111,6 +116,8 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		GetNode("bxRail/bxTransportX/IsUpLs/Area").Connect("area_exited", this, nameof(_on_IsUpLs_area_exited));		
 		
 		GetNode("../MessageLayer/ErrorRect/btIgnore").Connect("pressed", this, nameof(_ignoreError));
+		GetNode("../MessageLayer/ErrorRect/btReconnect").Connect("pressed", this, nameof(_reconnect));		
+		
 		GetNode("../GUI/Sequences/Start").Connect("pressed", this, nameof(_start));
 		GetNode("../GUI/Sequences/Stop").Connect("pressed", this, nameof(_stop));
 		GetNode("../GUI/Sequences/GoHome").Connect("pressed", this, nameof(_gohome));
@@ -143,14 +150,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition.x - 60, GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition.y-30);
 
 		if (_ads == null)
-		{
-			GetNode<Label>("../MessageLayer/ErrorRect/lbReconnect").Text = string.Format("Reconnecting in {0}s", (int)(5-_disconnectedDt));
-
-			_disconnectedDt += delta;
-			if(_disconnectedDt > 5)
-				ConnectPlc();
 			return;
-		}
 				
 		// Read data from PLC
 		PLC.Types.UselessBoxComPublish status;
@@ -186,7 +186,6 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		if (_dt > 0.03)
 		{
 			GetNode<Button>("../GUI/Sequences/Start").Disabled = status.Request.Start == 0;
-			GetNode<Button>("../GUI/Sequences/Stop").Disabled = status.Request.Stop == 0;
 			GetNode<Button>("../GUI/Sequences/GoHome").Disabled = status.Request.Gohome == 0;
 			
 			var colorOff = new Color(202.0f/255.0f,208.0f/255.0f,222.0f/255.0f);
@@ -296,7 +295,6 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 		//if (_cube.Mode != RigidBody.ModeEnum.Rigid)
 		//{
-			GD.Print("changing cube collision mode");
 			_cube.GetParent().RemoveChild(_cube);
 			AddChild(_cube);
 			_cube.Mode = RigidBody.ModeEnum.Rigid;
@@ -360,36 +358,24 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 	public void _on_IsDownLs_area_entered(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/GripperUpper/Area")) return;	
-		
-		GD.Print("is down entered")	;
 		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: true, sym: _controlIsDownLs);
 	}
 
 	public void _on_IsDownLs_area_exited(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/GripperUpper/Area")) return;		
-		
-		GD.Print("is down exited")	;
-		
 		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: false, sym: _controlIsDownLs);
 	}
 	
 	public void _on_IsUpLs_area_entered(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/Gripper/Area")) return;
-		
-		GD.Print("is up entered")	;
-
-		
 		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: true, sym: _controlIsUpLs);
 	}
 
 	public void _on_IsUpLs_area_exited(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/Gripper/Area")) return;	
-		
-		GD.Print("is up exited")	;
-			
 		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: false, sym: _controlIsUpLs);
 	}
 
@@ -477,7 +463,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			var sym = _controlTransportXPosition;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZEquipment_AxisManualPositionComSubscribe { Position1 = -3.5, Speed = 3, MoveAbsolute1 = 1 });
+				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZEquipment_AxisManualPositionComSubscribe { Position1 = -3.5, Speed = 10, MoveAbsolute1 = 1 });
 			}
 			catch (Exception ex)
 			{
@@ -493,7 +479,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			var sym = _controlTransportXPosition;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZEquipment_AxisManualPositionComSubscribe { Position1 = 3.5, Speed = 3, MoveAbsolute1 = 1 });
+				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZEquipment_AxisManualPositionComSubscribe { Position1 = 3.5, Speed = 10, MoveAbsolute1 = 1 });
 			}
 			catch (Exception ex)
 			{
@@ -553,8 +539,6 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		}
 		catch (Exception ex)
 		{
-			GD.Print("gohome ex");
-			
 			DisconnectPlc(ex);
 		}
 	}
@@ -564,7 +548,6 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		if (area != _cube.GetNode("Area"))
 			return;
 
-		GD.Print("cube entered magnetic zone");
 		_inMagnetZone = true;
 	}
 
@@ -573,7 +556,6 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		if (area != _cube.GetNode("Area"))
 			return;
 
-		GD.Print("cube exited magnetic zone");
 		_inMagnetZone = false;
 	}
 	
@@ -582,7 +564,12 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		_showException = false;
 		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
 	}
-	
+
+	public void _reconnect()
+	{
+		ConnectPlc();
+	}
+
 	public void _toggleOverlay()
 	{
 		GetNode<ColorRect>("../Overlay/ColorRect").Visible = !GetNode<ColorRect>("../Overlay/ColorRect").Visible;

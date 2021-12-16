@@ -745,7 +745,6 @@ __meta__ = {
 [node name="MessageLayer" type="CanvasLayer" parent="."]
 
 [node name="ErrorRect" type="ColorRect" parent="MessageLayer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.705882 )
@@ -763,29 +762,57 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="lbReconnect" type="Label" parent="MessageLayer/ErrorRect"]
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = -184.0
-margin_top = -300.0
-margin_right = -8.0
-margin_bottom = 300.0
-text = "Reconnecting in 5s ..."
-align = 2
-valign = 1
-
 [node name="btIgnore" type="Button" parent="MessageLayer/ErrorRect"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -96.0
-margin_top = -50.0
-margin_right = -17.0
-margin_bottom = -26.0
+margin_left = -88.0
+margin_top = -272.0
+margin_right = -9.0
+margin_bottom = -248.0
 text = "Ignore"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="leAmsNetId" type="LineEdit" parent="MessageLayer/ErrorRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 880.0
+margin_top = -36.0
+margin_right = -8.0
+margin_bottom = -12.0
+text = "127.0.0.1.1.1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="MessageLayer/ErrorRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 880.0
+margin_top = -68.0
+margin_right = -8.0
+margin_bottom = -44.0
+text = "AMS Net Id"
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btReconnect" type="Button" parent="MessageLayer/ErrorRect"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -88.0
+margin_top = -304.0
+margin_right = -9.0
+margin_bottom = -280.0
+text = "Reconnect"
 __meta__ = {
 "_edit_use_anchors_": false
 }
