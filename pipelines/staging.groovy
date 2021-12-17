@@ -29,6 +29,9 @@ pipeline {
 	dir('bin') { deleteDir() }
 	bat "mkdir bin"
         bat "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""  
+        dir('bin') {
+          archiveArtifacts artifacts: '**'
+        }
       }
     }   
   }
