@@ -27,8 +27,8 @@ pipeline {
       steps {
         bat "nuget.exe restore"
 	dir('bin') { deleteDir() }
-	bar "mkdir bin"
-        bat "Godot.exe --no-window --export "Windows Desktop" "${WORKSPACE}\bin\Tutorial_Quickstart_Visualization.exe"     
+	bat "mkdir bin"
+        bat "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""  
       }
     }   
   }
