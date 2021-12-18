@@ -3,6 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 # TwinCAT-specific files
+.mono/
 _Boot
 **/*/_Boot/
 **/*/_CompileInfo
