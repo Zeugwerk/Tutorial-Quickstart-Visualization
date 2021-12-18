@@ -743,9 +743,12 @@ __meta__ = {
 }
 
 [node name="lblConnectionState" type="Label" parent="MessageLayer/ErrorRect"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_top = 0.533
+anchor_bottom = 0.533
 margin_left = 5.0
+margin_top = -319.8
+margin_right = 1024.0
+margin_bottom = 280.2
 text = "Not connected to the PLC"
 valign = 1
 __meta__ = {
@@ -754,39 +757,41 @@ __meta__ = {
 
 [node name="btIgnore" type="Button" parent="MessageLayer/ErrorRect"]
 anchor_left = 1.0
-anchor_top = 1.0
+anchor_top = 0.533
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.533
 margin_left = -88.0
-margin_top = -272.0
+margin_top = 8.19998
 margin_right = -9.0
-margin_bottom = -248.0
+margin_bottom = 32.2
 text = "Ignore"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="leAmsNetId" type="LineEdit" parent="MessageLayer/ErrorRect"]
-anchor_top = 0.5
+anchor_left = 1.0
+anchor_top = 0.533
 anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = 880.0
-margin_top = -36.0
+anchor_bottom = 0.533
+margin_left = -144.0
+margin_top = -55.8
 margin_right = -8.0
-margin_bottom = -12.0
+margin_bottom = -31.8
 text = "127.0.0.1.1.1"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="MessageLayer/ErrorRect"]
-anchor_top = 0.5
+anchor_left = 1.0
+anchor_top = 0.533
 anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = 880.0
-margin_top = -68.0
+anchor_bottom = 0.533
+margin_left = -144.0
+margin_top = -87.8
 margin_right = -8.0
-margin_bottom = -44.0
+margin_bottom = -63.8
 text = "AMS Net Id"
 valign = 2
 __meta__ = {
@@ -795,13 +800,13 @@ __meta__ = {
 
 [node name="btReconnect" type="Button" parent="MessageLayer/ErrorRect"]
 anchor_left = 1.0
-anchor_top = 1.0
+anchor_top = 0.533
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.533
 margin_left = -88.0
-margin_top = -304.0
+margin_top = -23.8
 margin_right = -9.0
-margin_bottom = -280.0
+margin_bottom = 0.199982
 text = "Reconnect"
 __meta__ = {
 "_edit_use_anchors_": false
