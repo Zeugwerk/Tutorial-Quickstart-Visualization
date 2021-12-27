@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent { label 'VS2019' }
+  agent { label 'GODOT' }
   options {
     disableConcurrentBuilds()
     skipDefaultCheckout(true)
