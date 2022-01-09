@@ -23,7 +23,7 @@ pipeline {
           dir("bindings/Tutorial_Quickstart") { 
             currentBuild.upstreamBuilds?.each { b -> 
               println "CopyArtifacts from ${b.getFullProjectName()}"
-              copyArtifacts filter: 'bindings/Enums.cs,bindings/Structs.cs', projectName: b.getFullProjectName() as String, selector: upstream(), target: '.', flatten: true, optional: true 
+              copyArtifacts filter: 'bindings/Tutorial_Quickstart/Enums.cs,bindings/Tutorial_Quickstart/Structs.cs', projectName: b.getFullProjectName() as String, selector: upstream(), target: '.', flatten: true, optional: false 
             }
           }          
         }
