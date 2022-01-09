@@ -8,20 +8,27 @@ pipeline {
     timeout(time: 15, unit: 'MINUTES')
     office365ConnectorWebhooks([[notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: false ]])
   }
-
+  
   triggers {
     pollSCM 'H 5 * * *'
   }
-
+  
   stages {
     stage('Configure') {
       steps {
         script {
           def git = checkout scm
+          
+          // get bindings from upstream if available
+          dir("bindings/Tutorial_Quickstart") { 
+            currentBuild.upstreamBuilds?.each { b ->  
+              copyArtifacts filter: 'bindings/Enums.cs,bindings/Structs.cs', projectName: b.getFullProjectName() as String, selector: upstream(), target: '.', flatten: true, optional: true 
+            }
+          }          
         }
       }
     }
-			
+    
     stage('Build') {
       steps {
         bat "nuget.exe restore"
