@@ -21,7 +21,8 @@ pipeline {
           
           // get bindings from upstream if available
           dir("bindings/Tutorial_Quickstart") { 
-            currentBuild.upstreamBuilds?.each { b ->  
+            currentBuild.upstreamBuilds?.each { b -> 
+              println "CopyArtifacts from ${b.getFullProjectName()}"
               copyArtifacts filter: 'bindings/Enums.cs,bindings/Structs.cs', projectName: b.getFullProjectName() as String, selector: upstream(), target: '.', flatten: true, optional: true 
             }
           }          
@@ -34,7 +35,7 @@ pipeline {
         bat "nuget.exe restore"
         dir('bin') { deleteDir() }
         bat "mkdir bin"
-        bat "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""
+        bat "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""  
         dir('bin') {
           archiveArtifacts artifacts: '**'
         }
