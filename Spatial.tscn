@@ -342,8 +342,14 @@ __meta__ = {
 }
 
 [node name="Overlay" type="Label" parent="Overlay/ColorRect/crLeft"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = -0.533
+anchor_top = -13.75
+anchor_right = -0.533
+anchor_bottom = -13.75
+margin_left = 63.96
+margin_top = 440.0
+margin_right = 183.96
+margin_bottom = 472.0
 text = "Left limitswitch"
 align = 1
 valign = 1
@@ -362,8 +368,14 @@ __meta__ = {
 }
 
 [node name="Overlay" type="Label" parent="Overlay/ColorRect/crRight"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = -6.733
+anchor_top = -15.0
+anchor_right = -6.733
+anchor_bottom = -15.0
+margin_left = 807.96
+margin_top = 480.0
+margin_right = 927.96
+margin_bottom = 512.0
 text = "Right limitswitch"
 align = 1
 valign = 1
@@ -382,8 +394,14 @@ __meta__ = {
 }
 
 [node name="Overlay" type="Label" parent="Overlay/ColorRect/crConveyor"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = -3.4
+anchor_top = -14.25
+anchor_right = -3.4
+anchor_bottom = -14.25
+margin_left = 408.0
+margin_top = 456.0
+margin_right = 528.0
+margin_bottom = 488.0
 rect_pivot_offset = Vector2( 60, 0 )
 text = "Conveyor"
 align = 1
@@ -403,8 +421,14 @@ __meta__ = {
 }
 
 [node name="Overlay" type="Label" parent="Overlay/ColorRect/crTransport"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = -3.467
+anchor_top = -4.0
+anchor_right = -3.467
+anchor_bottom = -4.0
+margin_left = 416.04
+margin_top = 192.0
+margin_right = 536.04
+margin_bottom = 240.0
 text = "TransportX
 CylinderY"
 align = 1
@@ -424,8 +448,14 @@ __meta__ = {
 }
 
 [node name="Overlay" type="Label" parent="Overlay/ColorRect/crMagnet"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = -3.533
+anchor_top = -11.0
+anchor_right = -3.533
+anchor_bottom = -11.0
+margin_left = 423.96
+margin_top = 352.0
+margin_right = 543.96
+margin_bottom = 384.0
 text = "Magnet"
 align = 1
 valign = 1

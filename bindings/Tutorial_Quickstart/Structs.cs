@@ -20,12 +20,12 @@ namespace PLC
             public string str;
         } 
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
-        public struct UselessBoxComRequest
+        public struct QuickstartComRequest
         {
             public byte Start; // offset=0B, size=1B 
             // union in C# have issues with marshaling
             public byte Stop; // offset=1B, size=1B 
-            public byte Gohome; // offset=2B, size=1B 
+            public byte GoHome; // offset=2B, size=1B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -90,11 +90,11 @@ namespace PLC
         {
             public ZEquipment_AxisManualBaseFunctionComPublish Base; // offset=0B, size=168B 
             // union in C# have issues with marshaling
-            public ZEquipment_AxisManualHomingComPublish Homing; // offset=168B, size=1B 
+            public ZEquipment_AxisManualHomingComPublish Homing; // offset=168B, size=1B   -  publishes standard axis status and data like name, if it is simulated, if it is enabled or not 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public byte[] _pad0;
-            public ZEquipment_AxisManualCurrentComPublish Current; // offset=176B, size=16B 
-            public ZEquipment_AxisManualVelocityComPublish Velocity; // offset=192B, size=16B 
-            public ZEquipment_AxisManualPositionComPublish Position; // offset=208B, size=24B 
+            public ZEquipment_AxisManualCurrentComPublish Current; // offset=176B, size=16B   -  currently not publishing anything but later needed for sure to show homing status and maybe homing config  
+            public ZEquipment_AxisManualVelocityComPublish Velocity; // offset=192B, size=16B   -  publishes the actual needed current by the axis for controlling the actual action  
+            public ZEquipment_AxisManualPositionComPublish Position; // offset=208B, size=24B   -  publishes the actual velocity which the axis is currently running 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -102,14 +102,14 @@ namespace PLC
         {
             public String256 Name; // offset=0B, size=256B 
             // union in C# have issues with marshaling
-            public byte IsAtMinus; // offset=256B, size=1B 
-            public byte IsAtPlus; // offset=257B, size=1B 
+            public byte IsAtMinus; // offset=256B, size=1B  -  actual name of the actuator 
+            public byte IsAtPlus; // offset=257B, size=1B  -  signals that the actuator is actually positioned on its minus position 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)] public byte[] _pad0;
-            public double Duration; // offset=264B, size=8B 
-            public String81 MinusOutputName; // offset=272B, size=81B 
-            public String81 PlusOutputName; // offset=353B, size=81B 
-            public String81 MinusInputName; // offset=434B, size=81B 
-            public String81 PlusInputName; // offset=515B, size=81B 
+            public double Duration; // offset=264B, size=8B  -  signals that the actuator is actually positioned on its plus position 
+            public String81 MinusOutputName; // offset=272B, size=81B  -  duration of the actuator's last (successful and actually performed) movement in seconds 
+            public String81 PlusOutputName; // offset=353B, size=81B  -  configured name of the minus output if supported by the actual used actuator type 
+            public String81 MinusInputName; // offset=434B, size=81B  -  configured name of the plus output if supported by the actual used actuator type 
+            public String81 PlusInputName; // offset=515B, size=81B  -  configured name of the minus input if supported by the actual used actuator type 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] _pad1;
         };
          
@@ -126,7 +126,7 @@ namespace PLC
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
-        public struct UselessBoxComPublishEquipment
+        public struct QuickstartComPublishEquipment
         {
             public ZApplication_AxisComPublish TransportX; // offset=0B, size=232B 
             // union in C# have issues with marshaling
@@ -142,13 +142,13 @@ namespace PLC
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
-        public struct UselessBoxComPublish
+        public struct QuickstartComPublish
         {
-            public PLC.Enums.ZApplication_UnitStateMachineState State; // offset=0B, size=2B   -  state the unit is in 
+            public PLC.Enums.ZApplication_UnitStateMachineState State; // offset=0B, size=2B 
             // union in C# have issues with marshaling
-            public UselessBoxComRequest Request; // offset=2B, size=3B   -  booleans that indictate which action is currently possible to perform with this unit 
+            public QuickstartComRequest Request; // offset=2B, size=3B   -  state the unit is in 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)] public byte[] _pad0;
-            public UselessBoxComPublishEquipment Equipment; // offset=8B, size=2928B   -  structs for equipment objects which are used by the bridges 
+            public QuickstartComPublishEquipment Equipment; // offset=8B, size=2928B   -  booleans that indictate which action is currently possible to perform with this unit 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -200,10 +200,10 @@ namespace PLC
         {
             public ZEquipment_AxisManualBaseFunctionComSubscribe Base; // offset=0B, size=3B 
             // union in C# have issues with marshaling
-            public ZEquipment_AxisManualHomingComSubscribe Homing; // offset=3B, size=1B 
+            public ZEquipment_AxisManualHomingComSubscribe Homing; // offset=3B, size=1B   -  command basic axis functions like enable/disable or stop which every axis should have implemented 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] _pad0;
-            public ZEquipment_AxisManualVelocityComSubscribe Velocity; // offset=8B, size=16B 
-            public ZEquipment_AxisManualPositionComSubscribe Position; // offset=24B, size=72B 
+            public ZEquipment_AxisManualVelocityComSubscribe Velocity; // offset=8B, size=16B   -  command a current controlled movement of the axis if available (for servo or universal motors)  
+            public ZEquipment_AxisManualPositionComSubscribe Position; // offset=24B, size=72B   -  command a velocity controlled movement of an axis if available or allowed 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -211,7 +211,7 @@ namespace PLC
         {
             public byte MovePlus; // offset=0B, size=1B 
             // union in C# have issues with marshaling
-            public byte MoveMinus; // offset=1B, size=1B 
+            public byte MoveMinus; // offset=1B, size=1B  -  moves the actuator into the plus direction on a rising edge 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -223,7 +223,7 @@ namespace PLC
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
-        public struct UselessBoxComSubscribeEquipment
+        public struct QuickstartComSubscribeEquipment
         {
             public ZApplication_AxisComSubscribe TransportX; // offset=0B, size=96B 
             // union in C# have issues with marshaling
@@ -240,20 +240,20 @@ namespace PLC
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
-        public struct UselessBoxComSubscribe
+        public struct QuickstartComSubscribe
         {
-            public UselessBoxComRequest Request; // offset=0B, size=3B   -  contains booleans that are used to start a specific sequence. 
+            public QuickstartComRequest Request; // offset=0B, size=3B 
             // union in C# have issues with marshaling
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)] public byte[] _pad0;
-            public UselessBoxComSubscribeEquipment Equipment; // offset=8B, size=120B   -  structs for equipment objects which are used by the bridges 
+            public QuickstartComSubscribeEquipment Equipment; // offset=8B, size=120B   -  contains booleans that are used to start a specific sequence. 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
-        public struct UselessBoxCom
+        public struct QuickstartCom
         {
-            public UselessBoxComPublish Publish; // offset=0B, size=2936B 
+            public QuickstartComPublish Publish; // offset=0B, size=2936B 
             // union in C# have issues with marshaling
-            public UselessBoxComSubscribe Subscribe; // offset=2936B, size=128B 
+            public QuickstartComSubscribe Subscribe; // offset=2936B, size=128B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -272,7 +272,7 @@ namespace PLC
             public ZAux_LogEntry Extend; // offset=0B, size=272B 
             // union in C# have issues with marshaling
             public String256 Source; // offset=272B, size=256B 
-            public PLC.Enums.ZApplication_AlarmingState State; // offset=528B, size=2B 
+            public PLC.Enums.ZApplication_AlarmingState State; // offset=528B, size=2B   -  source of the alarm, usually this is the name of a unit 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)] public byte[] _pad0;
         };
          
@@ -295,7 +295,7 @@ namespace PLC
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)] public ZApplication_AlarmingAcknowledge[] Buffer;
             // union in C# have issues with marshaling
-            public byte Clear; // offset=11B, size=1B  -  set to true to remove all acknowledged messages 
+            public byte Clear; // offset=11B, size=1B  -  acknowledge an individual alarm, The index of the array has to match the index in [AlarmingComPublish](xref:ZApplication.AlarmingComPublish) 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -303,7 +303,7 @@ namespace PLC
         {
             public ZApplication_AlarmingComPublish Publish; // offset=0B, size=5896B 
             // union in C# have issues with marshaling
-            public ZApplication_AlarmingComSubscribe Subscribe; // offset=5896B, size=12B 
+            public ZApplication_AlarmingComSubscribe Subscribe; // offset=5896B, size=12B   -  contains status information of alarms, which can be read 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] _pad0;
         };
         

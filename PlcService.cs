@@ -22,7 +22,6 @@ public class PlcService : Node
 	Node _gripper;
 	bool _magnetIsOn, _inMagnetZone;
 	bool _pressed;
-	float _disconnectedDt;
 	bool _showException = true;
 
 	private void ConnectPlc()
@@ -32,7 +31,6 @@ public class PlcService : Node
 		
 		try
 		{
-			_disconnectedDt = 0;
 			_ads = new TcAdsClient();
 
 			if(netId == "")
@@ -41,17 +39,17 @@ public class PlcService : Node
 				_ads.Connect(netId, 851);
 				
 			_alarmingSymbol = _ads.ReadSymbolInfo("ZGlobal.Com.Alarming.publish");
-			_statusSymbol = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.publish");
-			_controlRequest = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Request");
-			_controlLeftLimitSwitch = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.LimitSwitchLeft");
-			_controlRightLimitSwitch = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.LimitSwitchRight");
-			_controlIsDownLs = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.CylinderYIsDown");
-			_controlIsUpLs = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.CylinderYIsUp");
-			_controlCylinderY = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.CylinderY");
-			_controlTransportXPosition = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.TransportX.Position");
-			_controlTransportXBase = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.TransportX.Base");
-			_controlMagnetOn = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.MagnetOn");
-			_controlConveyorOn = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.UselessBox.Subscribe.Equipment.ConveyorOn");
+			_statusSymbol = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.publish");
+			_controlRequest = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Request");
+			_controlLeftLimitSwitch = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.LimitSwitchLeft");
+			_controlRightLimitSwitch = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.LimitSwitchRight");
+			_controlIsDownLs = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.CylinderYIsDown");
+			_controlIsUpLs = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.CylinderYIsUp");
+			_controlCylinderY = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.CylinderY");
+			_controlTransportXPosition = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.TransportX.Position");
+			_controlTransportXBase = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.TransportX.Base");
+			_controlMagnetOn = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.MagnetOn");
+			_controlConveyorOn = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.ConveyorOn");
 
 			_ads.WriteAny((uint)_controlLeftLimitSwitch.IndexGroup, (uint)_controlLeftLimitSwitch.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 });
 			_ads.WriteAny((uint)_controlRightLimitSwitch.IndexGroup, (uint)_controlRightLimitSwitch.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 });
@@ -153,11 +151,11 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			return;
 				
 		// Read data from PLC
-		PLC.Types.UselessBoxComPublish status;
+		PLC.Types.QuickstartComPublish status;
 		PLC.Types.ZApplication_AlarmingComPublish alarming;
 		try
 		{
-			status = _ads.ReadSymbol<PLC.Types.UselessBoxComPublish>(_statusSymbol);
+			status = _ads.ReadSymbol<PLC.Types.QuickstartComPublish>(_statusSymbol);
 			alarming = _ads.ReadSymbol<PLC.Types.ZApplication_AlarmingComPublish>(_alarmingSymbol);
 		}
 		catch (Exception ex)
@@ -186,7 +184,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		if (_dt > 0.03)
 		{
 			GetNode<Button>("../GUI/Sequences/Start").Disabled = status.Request.Start == 0;
-			GetNode<Button>("../GUI/Sequences/GoHome").Disabled = status.Request.Gohome == 0;
+			GetNode<Button>("../GUI/Sequences/GoHome").Disabled = status.Request.GoHome == 0;
 			
 			var colorOff = new Color(202.0f/255.0f,208.0f/255.0f,222.0f/255.0f);
 			var colorOn = new Color(218.0f/255.0f,119.0f/255.0f,109.0f/255.0f);			
@@ -195,8 +193,8 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.IsEnabled > 0 ? colorOn : colorOff;
 			GetNode<ColorRect>("../GUI/Equipment/crConveyor").Color = status.Equipment.ConveyorOn.IsEnabled > 0 ? colorOn : colorOff;
 			
-			GetNode("stConveyor/Area").SetBlockSignals(status.State == PLC.Enums.ZApplication_UnitStateMachineState.Gohome);
-			if (status.State == PLC.Enums.ZApplication_UnitStateMachineState.Idle && _stateMem == PLC.Enums.ZApplication_UnitStateMachineState.Gohome)
+			GetNode("stConveyor/Area").SetBlockSignals(status.State == PLC.Enums.ZApplication_UnitStateMachineState.GoHome);
+			if (status.State == PLC.Enums.ZApplication_UnitStateMachineState.Idle && _stateMem == PLC.Enums.ZApplication_UnitStateMachineState.GoHome)
 				_resetCube();
 
 			var label = GetNode<Label>("../GUI/lblUnitState");
@@ -509,7 +507,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		var sym = _controlRequest;
 		try
 		{
-			_ads?.WriteSymbol(sym, new PLC.Types.UselessBoxComRequest { Stop = 1 });
+			_ads?.WriteSymbol(sym, new PLC.Types.QuickstartComRequest { Stop = 1 });
 		}
 		catch (Exception ex)
 		{
@@ -522,7 +520,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		var sym = _controlRequest;
 		try
 		{
-			_ads?.WriteSymbol(sym, new PLC.Types.UselessBoxComRequest { Start = 1 });
+			_ads?.WriteSymbol(sym, new PLC.Types.QuickstartComRequest { Start = 1 });
 		}
 		catch (Exception ex)
 		{
@@ -535,7 +533,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		var sym = _controlRequest;
 		try
 		{
-			_ads?.WriteSymbol(sym, new PLC.Types.UselessBoxComRequest { Gohome = 1 });
+			_ads?.WriteSymbol(sym, new PLC.Types.QuickstartComRequest { GoHome = 1 });
 		}
 		catch (Exception ex)
 		{

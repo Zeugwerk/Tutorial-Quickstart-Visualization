@@ -10,27 +10,27 @@ namespace PLC
         public enum ZApplication_UnitStateMachineState : short
         {
             Undefined = 0,
-            Boot = 1,
-            BootFault = 2,
-            Init = 3,
-            Idle = 4,
-            Stopped = 5,
-            Fault = 6,
-            Gohome = 7,
-            Stop = 8,
-            FaultReaction = 9,
-            Automatic = 10
+            Boot = 1,//  Zero is no valid state and therefore undefined
+            BootFault = 2,//  Initial state of a unit. It is executed during startup and can also be executed later if necessary to do a reinitialization
+            Init = 3,//  If booting (e.g. startup) fails, this is indicated by this state; possible errors can be a missing connection to a fieldbus or faulty initialization
+            Idle = 4,//  Init state is set after booting succeeded, this means the unit is ready for use but needs proper homing
+            Stopped = 5,//  Idle state signals that the unit is ready for use and is homed properly
+            Fault = 6,//  Signals to a statemachine that has been stopped and the *stop sequence* has been executed
+            GoHome = 7,//  If anything caused an error in a unit (usually an equipment instance inside the *automatic sequence* or the *homing sequence*) the statemachine takes care of executing a faultreaction and subsequently transitions into the fault state.
+            Stop = 8,//  Active state to bring the unit from an init or faulty state into a homed environment 
+            FaultReaction = 9,//  Active state to stop the unit by executing the *stop sequence* 
+            Automatic = 10//  Active state to react to a fault which happens during idle state or *automatic sequence*. When the fault reaction is done, the unit is put into its fault state.
         };
 
     
         // size = 2B
         public enum ZCore_ObjectState : short
         {
-            Booting = 0,//  after starting the PLC all objects are in its booting state and doing initialization stuff, this is represented by Booting
-            BootingError = 1,//  if something gets wrong in Booting state, the objects changes to BootingError
-            Idle = 2,//  after successfull boot phase, the object is in its idle state and ready for action
-            Busy = 3,//  in Busy state the object is doing its supposed work; this is signalized by [_obj.IsBusy()=TRUE](xref:ZCore.Object#IsBusy)
-            Error = 4//  if something gets wrong in Busy state, the object changes to error; this is signalized by [_obj.HasError()=TRUE](xref:ZCore.Object#HasError)
+            Booting = 0,
+            BootingError = 1,//  after starting the PLC all objects are in its booting state and doing initialization stuff, this is represented by Booting
+            Idle = 2,//  if something gets wrong in Booting state, the objects changes to BootingError
+            Busy = 3,//  after successfull boot phase, the object is in its idle state and ready for action
+            Error = 4//  in Busy state the object is doing its supposed work; this is signalized by [_obj.IsBusy()=TRUE](xref:ZCore.Object#IsBusy) if something gets wrong in Busy state, the object changes to error; this is signalized by [_obj.HasError()=TRUE](xref:ZCore.Object#HasError)
         };
 
     
@@ -52,13 +52,13 @@ namespace PLC
         // size = 2B
         public enum ZCore_LogLevel : short
         {
-            Trace = 0,//  *Zeugwerk Framework* diagnostic messages, this level is reserved for use libraries
-            Debug = 1,//  detailed information about key method parameters or other information that is useful for finding likely problems in specific 'problematic' areas of the code
-            Info = 2,//  diagnostic messages in production (step changes, method calls, ...)
-            Warning = 3,//  errors in sequences that are unusual, but the machine can deal with at least semi-automatically
-            Error = 4,//  sequence error that stop the machine from working properly (axes fault, actuator timeouts, invalid data ...)
-            Fatal = 5,//  hardware failures, booting sequence failures
-            Off = 6//  used to switch off log messages completely when setting a [log-level filter](xref:ZAux.Logger#SetLevel)
+            Trace = 0,
+            Debug = 1,//  *Zeugwerk Framework* diagnostic messages, this level is reserved for use libraries
+            Info = 2,//  detailed information about key method parameters or other information that is useful for finding likely problems in specific 'problematic' areas of the code
+            Warning = 3,//  diagnostic messages in production (step changes, method calls, ...)
+            Error = 4,//  errors in sequences that are unusual, but the machine can deal with at least semi-automatically
+            Fatal = 5,//  sequence error that stop the machine from working properly (axes fault, actuator timeouts, invalid data ...)
+            Off = 6//  hardware failures, booting sequence failures used to switch off log messages completely when setting a [log-level filter](xref:ZCore.ILogger#SetLevel)
         };
 
     
