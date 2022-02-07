@@ -7,41 +7,6 @@ namespace PLC
     {
     
         // size = 2B
-        public enum ZApplication_ApplicationState : short
-        {
-            Undefined = 0,
-            Boot = 1,
-            Running = 2,
-            BootFault = 3
-        };
-
-    
-        // size = 2B
-        public enum ZCore_LogLevel : short
-        {
-            Trace = 0,// < *Zeugwerk Framework* diagnostic messages, this level is reserved for use libraries
-            Debug = 1,// < detailed information about key method parameters or other information that is useful for finding likely problems in specific 'problematic' areas of the code
-            Info = 2,// < diagnostic messages in production (step changes, method calls, ...)
-            Warning = 3,// < errors in sequences that are unusual, but the machine can deal with at least semi-automatically
-            Error = 4,// < sequence error that stop the machine from working properly (axes fault, actuator timeouts, invalid data ...)
-            Fatal = 5,// < hardware failures, booting sequence failures
-            Off = 6// < used to switch off log messages completely when setting a [log-level filter](xref:ZCore.ILogger#SetLevel)
-        };
-
-    
-        // size = 2B
-        public enum ZApplication_AlarmingState : short
-        {
-            Undefined = 0,
-            Incoming = 1,// < an alarm was issued by the PLC
-            IncomingAcknowledged = 2,// < the incoming alarm has been acknowledged by an operator or a trigger
-            Outgoing = 4,// < the reason why the alarm was issued by the PLC is gone
-            OutgoingAcknowledged = 8,// < the disappearance of the alarm reason is acknowledged by the operator or a trigger
-            Done = 15// < no user interaction required
-        };
-
-    
-        // size = 2B
         public enum ZApplication_UnitStateMachineState : short
         {
             Undefined = 0,// < Zero is no valid state and therefore undefined
@@ -81,6 +46,31 @@ namespace PLC
             PulsedOutput = 6,
             DebouncedInput = 7,
             Userdefined = 8
+        };
+
+    
+        // size = 2B
+        public enum ZCore_LogLevel : short
+        {
+            Trace = 0,// < *Zeugwerk Framework* diagnostic messages, this level is reserved for use libraries
+            Debug = 1,// < detailed information about key method parameters or other information that is useful for finding likely problems in specific 'problematic' areas of the code
+            Info = 2,// < diagnostic messages in production (step changes, method calls, ...)
+            Warning = 3,// < errors in sequences that are unusual, but the machine can deal with at least semi-automatically
+            Error = 4,// < sequence error that stop the machine from working properly (axes fault, actuator timeouts, invalid data ...)
+            Fatal = 5,// < hardware failures, booting sequence failures
+            Off = 6// < used to switch off log messages completely when setting a [log-level filter](xref:ZCore.ILogger#SetLevel)
+        };
+
+    
+        // size = 2B
+        public enum ZApplication_AlarmingState : short
+        {
+            Undefined = 0,
+            Incoming = 1,// < an alarm was issued by the PLC
+            IncomingAcknowledged = 2,// < the incoming alarm has been acknowledged by an operator or a trigger
+            Outgoing = 4,// < the reason why the alarm was issued by the PLC is gone
+            OutgoingAcknowledged = 8,// < the disappearance of the alarm reason is acknowledged by the operator or a trigger
+            Done = 15// < no user interaction required
         };
 
     

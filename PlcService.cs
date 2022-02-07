@@ -461,7 +461,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			var sym = _controlTransportXPosition;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZEquipment_AxisManualPositionComSubscribe { Position1 = -3.5, Speed = 10, MoveAbsolute1 = 1 });
+				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = -3.5, Speed = 10, MoveAbsolute1 = 1 });
 			}
 			catch (Exception ex)
 			{
@@ -477,7 +477,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			var sym = _controlTransportXPosition;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZEquipment_AxisManualPositionComSubscribe { Position1 = 3.5, Speed = 10, MoveAbsolute1 = 1 });
+				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = 3.5, Speed = 10, MoveAbsolute1 = 1 });
 			}
 			catch (Exception ex)
 			{
@@ -493,7 +493,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			var sym = _controlTransportXBase;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZEquipment_AxisManualBaseFunctionComSubscribe { Stop = 1 });
+				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_AxisComBaseFunctionSubscribe { Stop = 1 });
 			}
 			catch (Exception ex)
 			{
