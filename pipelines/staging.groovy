@@ -6,7 +6,6 @@ pipeline {
     disableConcurrentBuilds()
     skipDefaultCheckout(true)
     timeout(time: 15, unit: 'MINUTES')
-    office365ConnectorWebhooks([[notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: false ]])
   }
   
   triggers {
@@ -23,7 +22,7 @@ pipeline {
           dir("bindings/Tutorial_Quickstart") { 
             currentBuild.upstreamBuilds?.each { b -> 
               println "CopyArtifacts from ${b.getFullProjectName()}"
-              copyArtifacts filter: 'bindings/Tutorial_Quickstart/Enums.cs,bindings/Tutorial_Quickstart/Structs.cs', projectName: b.getFullProjectName() as String, selector: upstream(), target: '.', flatten: true, optional: false 
+              copyArtifacts filter: 'bindings/Zeugwerk Quickstart/Classes.cs,bindings/Zeugwerk Quickstart/Enums.cs,bindings/Zeugwerk Quickstart/Structs.cs', projectName: b.getFullProjectName() as String, selector: upstream(), target: '.', flatten: true, optional: false 
             }
           }          
         }
@@ -37,7 +36,7 @@ pipeline {
         bat "mkdir bin"
         bat "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""  
         dir('bin') {
-          archiveArtifacts artifacts: '**'
+          archiveArtifacts artifacts: 'Tutorial_Quickstart_Visualization.exe,Tutorial_Quickstart_Visualization.pck'
         }
       }
     }   
