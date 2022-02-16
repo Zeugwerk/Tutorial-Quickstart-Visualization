@@ -48,7 +48,12 @@ public class PlcService : Node
 
 	private void DisconnectPlc(Exception ex)
 	{
-		_quickstart = null;
+		// create dummy classes
+		if(_ads != null)
+		{
+			_quickstart = new PLC.Mirror.QuickstartCom("ZGlobal.Com.Unit.Quickstart");
+			_alarming = new PLC.Mirror.ZApplication_AlarmingCom("ZGlobal.Com.Alarming");		
+		}
 		_ads = null;
 
 		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
