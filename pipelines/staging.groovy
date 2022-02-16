@@ -36,7 +36,7 @@ pipeline {
         bat "mkdir bin"
         bat "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""  
         dir('bin') {
-          archiveArtifacts artifacts: 'Tutorial_Quickstart_Visualization.exe,Tutorial_Quickstart_Visualization.pck'
+          archiveArtifacts artifacts: 'Tutorial_Quickstart_Visualization.exe,Tutorial_Quickstart_Visualization.pck,data_Visualization/**/*'
         }
       }
     }   
