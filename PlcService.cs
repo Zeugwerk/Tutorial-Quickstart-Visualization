@@ -7,13 +7,8 @@ using System.Linq;
 public class PlcService : Node
 {
 	TcAdsClient _ads = null;
-	ITcAdsSymbol _statusSymbol, _alarmingSymbol;
-	ITcAdsSymbol _controlLeftLimitSwitch, _controlRightLimitSwitch;
-	ITcAdsSymbol _controlTransportXPosition, _controlTransportXBase;
-	ITcAdsSymbol _controlMagnetOn, _controlConveyorOn;
-	ITcAdsSymbol _controlCylinderY;
-	ITcAdsSymbol _controlIsDownLs, _controlIsUpLs;	
-	ITcAdsSymbol _controlRequest;
+	PLC.Mirror.QuickstartCom _quickstart = null;
+	PLC.Mirror.ZApplication_AlarmingCom _alarming = null;
 
 	float _dt;
 	PLC.Enums.ZApplication_UnitStateMachineState _stateMem;
@@ -34,26 +29,15 @@ public class PlcService : Node
 			_ads = new TcAdsClient();
 
 			if(netId == "")
-				_ads.Connect(851);			
+				_ads.Connect(851);
 			else
 				_ads.Connect(netId, 851);
-				
-			_alarmingSymbol = _ads.ReadSymbolInfo("ZGlobal.Com.Alarming.publish");
-			_statusSymbol = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.publish");
-			_controlRequest = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Request");
-			_controlLeftLimitSwitch = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.LimitSwitchLeft");
-			_controlRightLimitSwitch = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.LimitSwitchRight");
-			_controlIsDownLs = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.CylinderYIsDown");
-			_controlIsUpLs = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.CylinderYIsUp");
-			_controlCylinderY = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.CylinderY");
-			_controlTransportXPosition = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.TransportX.Position");
-			_controlTransportXBase = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.TransportX.Base");
-			_controlMagnetOn = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.MagnetOn");
-			_controlConveyorOn = _ads.ReadSymbolInfo("ZGlobal.Com.Unit.Quickstart.Subscribe.Equipment.ConveyorOn");
 
-			_ads.WriteAny((uint)_controlLeftLimitSwitch.IndexGroup, (uint)_controlLeftLimitSwitch.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 });
-			_ads.WriteAny((uint)_controlRightLimitSwitch.IndexGroup, (uint)_controlRightLimitSwitch.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 });
-			
+			_quickstart = new PLC.Mirror.QuickstartCom("ZGlobal.Com.Unit.Quickstart", _ads);
+			_alarming = new PLC.Mirror.ZApplication_AlarmingCom("ZGlobal.Com.Alarming", _ads);
+			_quickstart.Subscribe.Equipment.LimitSwitchLeft.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 };
+			_quickstart.Subscribe.Equipment.LimitSwitchRight.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 };
+
 			GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = false;
 		}
 		catch (Exception ex)
@@ -64,18 +48,7 @@ public class PlcService : Node
 
 	private void DisconnectPlc(Exception ex)
 	{
-		_alarmingSymbol = null;
-		_statusSymbol = null;
-		_controlRequest = null;
-		_controlLeftLimitSwitch = null;
-		_controlRightLimitSwitch = null;
-		_controlIsDownLs = null;
-		_controlIsUpLs = null;		
-		_controlCylinderY = null;
-		_controlTransportXPosition = null;
-		_controlTransportXBase = null;
-		_controlMagnetOn = null;
-		_controlConveyorOn = null;
+		_quickstart = null;
 		_ads = null;
 
 		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
@@ -155,8 +128,8 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		PLC.Types.ZApplication_AlarmingComPublish alarming;
 		try
 		{
-			status = _ads.ReadSymbol<PLC.Types.QuickstartComPublish>(_statusSymbol);
-			alarming = _ads.ReadSymbol<PLC.Types.ZApplication_AlarmingComPublish>(_alarmingSymbol);
+			status = _quickstart.Publish.Sync;
+			alarming = _alarming.Publish.Sync;
 		}
 		catch (Exception ex)
 		{
@@ -165,7 +138,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		}
 
 		// Alarming
-		var message = alarming.Buffer.Where(x => x.Extend.LogLevel > PLC.Enums.ZCore_LogLevel.Debug).OrderBy(x => x.Extend.LogLevel).FirstOrDefault();
+		var message = alarming.Buffer.data.Where(x => x.Extend.LogLevel > PLC.Enums.ZCore_LogLevel.Debug).OrderBy(x => x.Extend.LogLevel).FirstOrDefault();
 		if(message.State != PLC.Enums.ZApplication_AlarmingState.Undefined)
 			GetNode<Label>("../GUI/lbMessage").Text = $"[{(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(message.Extend.TimeStamp / 1000).ToLocalTime()}]\n[{message.State}] {message.Extend.Text.str}";
 		else
@@ -310,7 +283,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			new Vector3((float)(-2 + rnd.NextDouble() * 0.004), (float)(-2 + rnd.NextDouble() * 0.004), (float)(-1 + rnd.NextDouble() * 0.004));
 	}
 	
-	public void ToggleAreaBox(CSGBox box, bool on, ITcAdsSymbol sym)
+	public void ToggleAreaBox(CSGBox box, bool on, PLC.Mirror.ZApplication_DigitalComSubscribe digitalIo)
 	{
 		((SpatialMaterial)box.Material).EmissionEnabled = on;
 		
@@ -321,7 +294,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 		try
 		{
-			_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = on ? (byte)1 : (byte)0, Write = 1 });
+			digitalIo.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = on ? (byte)1 : (byte)0, Write = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -332,57 +305,57 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 	public void _on_Right_area_entered(Area area)
 	{
 		if (area != _cube.GetNode("Area")) return;
-		ToggleAreaBox(GetNode<CSGBox>("Right/CollisionShape/RightLimitSwitch"), on: true, sym: _controlRightLimitSwitch);
+
+		ToggleAreaBox(GetNode<CSGBox>("Right/CollisionShape/RightLimitSwitch"), on: true, digitalIo: _quickstart.Subscribe.Equipment.LimitSwitchRight );
 	}
 
 	public void _on_Right_area_exited(Area area=null)
 	{
 		if (area != _cube.GetNode("Area")) return;
-		ToggleAreaBox(GetNode<CSGBox>("Right/CollisionShape/RightLimitSwitch"), on: false, sym: _controlRightLimitSwitch);
+		ToggleAreaBox(GetNode<CSGBox>("Right/CollisionShape/RightLimitSwitch"), on: false, digitalIo: _quickstart.Subscribe.Equipment.LimitSwitchRight);
 	}
 
 	public void _on_Left_area_entered(Area area)
 	{
 		if (area != _cube.GetNode("Area")) return;
-		ToggleAreaBox(GetNode<CSGBox>("Left/CollisionShape/LeftLimitSwitch"), on: true, sym: _controlLeftLimitSwitch);
+		ToggleAreaBox(GetNode<CSGBox>("Left/CollisionShape/LeftLimitSwitch"), on: true, digitalIo: _quickstart.Subscribe.Equipment.LimitSwitchLeft);
 	}
 
 	public void _on_Left_area_exited(Area area)
 	{
 		if (area != _cube.GetNode("Area")) return;
-		ToggleAreaBox(GetNode<CSGBox>("Left/CollisionShape/LeftLimitSwitch"), on: false, sym: _controlLeftLimitSwitch);
+		ToggleAreaBox(GetNode<CSGBox>("Left/CollisionShape/LeftLimitSwitch"), on: false, digitalIo: _quickstart.Subscribe.Equipment.LimitSwitchLeft);
 	}
 
 	public void _on_IsDownLs_area_entered(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/GripperUpper/Area")) return;	
-		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: true, sym: _controlIsDownLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: true, digitalIo: _quickstart.Subscribe.Equipment.CylinderYIsDown);
 	}
 
 	public void _on_IsDownLs_area_exited(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/GripperUpper/Area")) return;		
-		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: false, sym: _controlIsDownLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsDownLs"), on: false, digitalIo: _quickstart.Subscribe.Equipment.CylinderYIsDown);
 	}
 	
 	public void _on_IsUpLs_area_entered(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/Gripper/Area")) return;
-		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: true, sym: _controlIsUpLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: true, digitalIo: _quickstart.Subscribe.Equipment.CylinderYIsUp);
 	}
 
 	public void _on_IsUpLs_area_exited(Area area)
 	{
 		if (area != GetNode("bxRail/bxTransportX/rbCylinderY/Gripper/Area")) return;	
-		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: false, sym: _controlIsUpLs);
+		ToggleAreaBox(GetNode<CSGBox>("bxRail/bxTransportX/IsUpLs"), on: false, digitalIo: _quickstart.Subscribe.Equipment.CylinderYIsUp);
 	}
 
 	public void _moveup()
 	{
-		var sym = _controlCylinderY;
 		try
 		{
-			_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_ActuatorDigitalComSubscribe { MovePlus = 1 });
+			_quickstart.Subscribe.Equipment.CylinderY.Sync = new PLC.Types.ZApplication_ActuatorDigitalComSubscribe { MovePlus = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -392,10 +365,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 	public void _movedown()
 	{
-		var sym = _controlCylinderY;
 		try
 		{
-			_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_ActuatorDigitalComSubscribe { MoveMinus = 1 });
+			_quickstart.Subscribe.Equipment.CylinderY.Sync = new PLC.Types.ZApplication_ActuatorDigitalComSubscribe { MoveMinus = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -405,10 +377,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 	public void _magnetOn()
 	{
-		var sym = _controlMagnetOn;
 		try
 		{
-			_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 1, Write = 1 });
+			_quickstart.Subscribe.Equipment.MagnetOn.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 1, Write = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -417,10 +388,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 	}
 	public void _magnetOff()
 	{
-		var sym = _controlMagnetOn;
 		try
 		{
-			_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 });
+			_quickstart.Subscribe.Equipment.MagnetOn.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -430,10 +400,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 	public void _conveyorOn()
 	{
-		var sym = _controlConveyorOn;
 		try
 		{
-			_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 1, Write = 1 });
+			_quickstart.Subscribe.Equipment.ConveyorOn.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 1, Write = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -442,10 +411,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 	}
 	public void _conveyorOff()
 	{
-		var sym = _controlConveyorOn;
 		try
 		{
-			_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 });
+			_quickstart.Subscribe.Equipment.ConveyorOn.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -458,10 +426,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		if (!_pressed)
 		{
 			_pressed = true;
-			var sym = _controlTransportXPosition;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = -3.5, Speed = 10, MoveAbsolute1 = 1 });
+				_quickstart.Subscribe.Equipment.TransportX.Position.Sync = new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = -3.5, Speed = 0.1, MoveAbsolute1 = 1 };
 			}
 			catch (Exception ex)
 			{
@@ -474,10 +441,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		if (!_pressed)
 		{
 			_pressed = true;
-			var sym = _controlTransportXPosition;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = 3.5, Speed = 10, MoveAbsolute1 = 1 });
+				_quickstart.Subscribe.Equipment.TransportX.Position.Sync = new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = 3.5, Speed = 0.1, MoveAbsolute1 = 1 };
 			}
 			catch (Exception ex)
 			{
@@ -490,10 +456,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		if (_pressed)
 		{
 			_pressed = false;
-			var sym = _controlTransportXBase;
 			try
 			{
-				_ads?.WriteAny((uint)sym.IndexGroup, (uint)sym.IndexOffset, new PLC.Types.ZApplication_AxisComBaseFunctionSubscribe { Stop = 1 });
+				_quickstart.Subscribe.Equipment.TransportX.Base.Sync = new PLC.Types.ZApplication_AxisComBaseFunctionSubscribe { Stop = 1 };
 			}
 			catch (Exception ex)
 			{
@@ -504,10 +469,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 	public void _stop()
 	{
-		var sym = _controlRequest;
 		try
 		{
-			_ads?.WriteSymbol(sym, new PLC.Types.QuickstartComRequest { Stop = 1 });
+			_quickstart.Subscribe.Request.Sync = new PLC.Types.QuickstartComRequest { Stop = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -517,10 +481,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 	public void _start()
 	{
-		var sym = _controlRequest;
 		try
 		{
-			_ads?.WriteSymbol(sym, new PLC.Types.QuickstartComRequest { Start = 1 });
+			_quickstart.Subscribe.Request.Sync = new PLC.Types.QuickstartComRequest { Start = 1 };
 		}
 		catch (Exception ex)
 		{
@@ -530,10 +493,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 	public void _gohome()
 	{
-		var sym = _controlRequest;
 		try
 		{
-			_ads?.WriteSymbol(sym, new PLC.Types.QuickstartComRequest { GoHome = 1 });
+			_quickstart.Subscribe.Request.Sync = new PLC.Types.QuickstartComRequest { GoHome = 1 };
 		}
 		catch (Exception ex)
 		{

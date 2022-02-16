@@ -18,12 +18,110 @@ namespace PLC
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 81)]
             public string str;
+        }
+        public struct Array_0_2_byte
+        {
+            public byte this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+            public byte[] data;
+        }
+        public struct Array_0_5_byte
+        {
+            public byte this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+            public byte[] data;
+        }
+        public struct Array_0_0_byte
+        {
+            public byte this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
+            public byte[] data;
+        }
+        public struct Array_0_3_byte
+        {
+            public byte this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            public byte[] data;
+        }
+        public struct Array_0_1_byte
+        {
+            public byte this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+            public byte[] data;
+        }
+        public struct Array_0_4_byte
+        {
+            public byte this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+            public byte[] data;
+        }
+        public struct Array_0_10_ZApplication_AlarmingAcknowledge
+        {
+            public ZApplication_AlarmingAcknowledge this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
+            public ZApplication_AlarmingAcknowledge[] data;
+        }
+        public struct Array_0_6_byte
+        {
+            public byte this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
+            public byte[] data;
+        }
+        public struct Array_0_10_ZApplication_AlarmingMessageCom
+        {
+            public ZApplication_AlarmingMessageCom this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
+            public ZApplication_AlarmingMessageCom[] data;
         } 
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct QuickstartComRequest
         {
             public byte Start; // offset=0B, size=1B 
-            // union in C# have issues with marshaling
             public byte Stop; // offset=1B, size=1B 
             public byte GoHome; // offset=2B, size=1B 
         };
@@ -32,14 +130,12 @@ namespace PLC
         public struct ZApplication_AxisComBase
         {
             public byte Supported; // offset=0B, size=1B  - < Is the function that the struct provides supported and implemented for this axis instance? 
-            // union in C# have issues with marshaling
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComBaseFunctionPublish
         {
             public ZApplication_AxisComBase Extend; // offset=0B, size=1B 
-            // union in C# have issues with marshaling
             public String81 Name; // offset=1B, size=81B  - < axis name according to the PLC 
             public String81 Manufacturer; // offset=82B, size=81B  - < refers to the axis object, which is used in the PLC to control the axis (i.e. AxisPlcOpenMc) 
             public byte IsSimulated; // offset=163B, size=1B  - < is the axis running in simulated mode (usually via [AxisSimulatedImpl](xref:ZEquipment.AxisSimulatedImpl)) 
@@ -47,7 +143,7 @@ namespace PLC
             public byte IsDrivePowered; // offset=166B, size=1B  - < is high-power available? 
             public byte IsDriveEnabled; // offset=167B, size=1B  - < is the drive controlling the axis, e.g. the motor has power applied to it 
             public byte IsParked; // offset=168B, size=1B  - < is the axis disabled by software 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public byte[] _pad0;
+            public Array_0_6_byte _pad0; // offset=169B, size=7B 
             public double ActPosition; // offset=176B, size=8B  - < actual position of the axis, may be 0 if the axis doesn't support positioning 
             public double ActFollowingError; // offset=184B, size=8B  - < actual following error, which is the deviation between the profile-generator's nominal values from ActPosition 
             public double ActVelocity; // offset=192B, size=8B  - < actual velocity 
@@ -55,35 +151,31 @@ namespace PLC
             public short DecimalPlacesPosition; // offset=208B, size=2B  - < number of significant digits for ActPosition and ActFollowingError 
             public short DecimalPlacesVelocity; // offset=210B, size=2B  - < number of significant digits for ActVelocity 
             public short DecimalPlacesCurrent; // offset=212B, size=2B  - < number of significant digits for ActCurrent 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)] public byte[] _pad1;
+            public Array_0_1_byte _pad1; // offset=26B, size=2B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComHomingPublish
         {
             public ZApplication_AxisComBase Extend; // offset=0B, size=1B 
-            // union in C# have issues with marshaling
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComCurrentPublish
         {
             public ZApplication_AxisComBase Extend; // offset=0B, size=1B 
-            // union in C# have issues with marshaling
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComVelocityPublish
         {
             public ZApplication_AxisComBase Extend; // offset=0B, size=1B 
-            // union in C# have issues with marshaling
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComPositionPublish
         {
             public ZApplication_AxisComBase Extend; // offset=0B, size=1B 
-            // union in C# have issues with marshaling
             public byte IsReferenced; // offset=1B, size=1B  - < Is the axis referenced by either an absolute encoder or incremental encoder? 
         };
          
@@ -91,47 +183,43 @@ namespace PLC
         public struct ZApplication_AxisComPublish
         {
             public ZApplication_AxisComBaseFunctionPublish Base; // offset=0B, size=216B   - < publishes standard axis status and data like name, if it is simulated, if it is enabled or not 
-            // union in C# have issues with marshaling
             public ZApplication_AxisComHomingPublish Homing; // offset=216B, size=1B   - < currently not publishing anything but later needed for sure to show homing status and maybe homing config  
             public ZApplication_AxisComCurrentPublish Current; // offset=217B, size=1B   - < publishes the actual needed current by the axis for controlling the actual action  
             public ZApplication_AxisComVelocityPublish Velocity; // offset=218B, size=1B   - < publishes the actual velocity which the axis is currently running 
             public ZApplication_AxisComPositionPublish Position; // offset=219B, size=2B   - < publishes the actual position, following error and the configured decimal places of the axis  
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)] public byte[] _pad0;
+            public Array_0_2_byte _pad0; // offset=27B, size=3B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_ActuatorDigitalComPublish
         {
             public String256 Name; // offset=0B, size=256B  - < actual name of the actuator 
-            // union in C# have issues with marshaling
             public byte IsAtMinus; // offset=256B, size=1B  - < signals that the actuator is actually positioned on its minus position 
             public byte IsAtPlus; // offset=257B, size=1B  - < signals that the actuator is actually positioned on its plus position 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)] public byte[] _pad0;
+            public Array_0_5_byte _pad0; // offset=258B, size=6B 
             public double Duration; // offset=264B, size=8B  - < duration of the actuator's last (successful and actually performed) movement in seconds 
             public String81 MinusOutputName; // offset=272B, size=81B  - < configured name of the minus output if supported by the actual used actuator type 
             public String81 PlusOutputName; // offset=353B, size=81B  - < configured name of the plus output if supported by the actual used actuator type 
             public String81 MinusInputName; // offset=434B, size=81B  - < configured name of the minus input if supported by the actual used actuator type 
             public String81 PlusInputName; // offset=515B, size=81B  - < configured name of the plus input if supported by the actual used actuator type 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] _pad1;
+            public Array_0_3_byte _pad1; // offset=74B, size=4B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_DigitalComPublish
         {
             public String256 Name; // offset=0B, size=256B 
-            // union in C# have issues with marshaling
             public PLC.Enums.ZApplication_IoType IoType; // offset=256B, size=2B 
             public byte IsSimulated; // offset=258B, size=1B 
             public byte IsWriteable; // offset=259B, size=1B 
             public byte IsEnabled; // offset=260B, size=1B 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)] public byte[] _pad0;
+            public Array_0_0_byte _pad0; // offset=32B, size=1B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct QuickstartComPublishEquipment
         {
             public ZApplication_AxisComPublish TransportX; // offset=0B, size=224B 
-            // union in C# have issues with marshaling
             public ZApplication_ActuatorDigitalComPublish CylinderY; // offset=224B, size=600B 
             public ZApplication_DigitalComPublish MagnetOn; // offset=824B, size=262B 
             public ZApplication_DigitalComPublish LimitSwitchLeft; // offset=1086B, size=262B 
@@ -147,9 +235,8 @@ namespace PLC
         public struct QuickstartComPublish
         {
             public PLC.Enums.ZApplication_UnitStateMachineState State; // offset=0B, size=2B 
-            // union in C# have issues with marshaling
             public QuickstartComRequest Request; // offset=2B, size=3B   -  state the unit is in 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)] public byte[] _pad0;
+            public Array_0_2_byte _pad0; // offset=5B, size=3B 
             public QuickstartComPublishEquipment Equipment; // offset=8B, size=2920B   -  booleans that indictate which action is currently possible to perform with this unit 
         };
          
@@ -157,7 +244,6 @@ namespace PLC
         public struct ZApplication_AxisComBaseFunctionSubscribe
         {
             public byte EnableDrive; // offset=0B, size=1B  - < Set to `TRUE` to perform a enabled drive action, which will apply power to the motor. The PLC automatically resets to `FALSE` 
-            // union in C# have issues with marshaling
             public byte DisableDrive; // offset=1B, size=1B  - < Set to `TRUE` to perform a disable drive action, which will stop powering the motor. The PLC automatically resets to `FALSE` 
             public byte Stop; // offset=2B, size=1B  - < Set to `TRUE` to perform a (fast) stop, usually this stop uses a quick-stop ramp. The PLC automatically resets to `FALSE` 
             public byte Halt; // offset=3B, size=1B  - < Set to `TRUE` to perform a normal stop, usually this stop uses the same profile as "normal" movements. The PLC automatically resets to `FALSE` 
@@ -167,44 +253,40 @@ namespace PLC
         public struct ZApplication_AxisComHomingSubscribe
         {
             public byte Homing; // offset=0B, size=1B  - < Set to `TRUE` to perform the axis's homing procedure. The PLC automatically resets to `FALSE` 
-            // union in C# have issues with marshaling
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComVelocitySubscribe
         {
             public double Velocity; // offset=0B, size=8B 
-            // union in C# have issues with marshaling
             public byte MoveVelocity; // offset=8B, size=1B 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public byte[] _pad0;
+            public Array_0_6_byte _pad0; // offset=1B, size=7B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComPositionSubscribe
         {
             public double Speed; // offset=0B, size=8B  - < Used together with `MoveAbsolute1`, `MoveAbsolute1`, `MoveContinuous` and `MoveRelative`  
-            // union in C# have issues with marshaling
             public double Position1; // offset=8B, size=8B 
             public byte MoveAbsolute1; // offset=16B, size=1B  - < Used together with `MoveAbsolute1` and `MoveContinuous` 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public byte[] _pad0;
+            public Array_0_6_byte _pad0; // offset=17B, size=7B 
             public double Position2; // offset=24B, size=8B  - < Used together with `MoveAbsolute2` and `MoveContinuous` 
             public byte MoveAbsolute2; // offset=32B, size=1B  - < Set to `TRUE`` to start moving the axis to `Position2` with `Speed`. Automatically reset to `FALSE` by the PLC. 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public byte[] _pad1;
+            public Array_0_6_byte _pad1; // offset=33B, size=7B 
             public double Delay; // offset=40B, size=8B  - < Used together with `MoveContinuous` 
             public byte MoveContinuous; // offset=48B, size=1B  - < Set to `TRUE`` to start moving continously from `Position1` to `Position2` (and back) with `Speed` and `Delay`. Automatically reset to `FALSE` by the PLC. 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public byte[] _pad2;
+            public Array_0_6_byte _pad2; // offset=49B, size=7B 
             public double Distance; // offset=56B, size=8B  - < Used together with `MoveRelative` 
             public byte MoveRelative; // offset=64B, size=1B  - < Set to `TRUE`` to start moving to a position that is relative `distance` away from the actual position. Automatically reset to `FALSE` by the PLC. 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public byte[] _pad3;
+            public Array_0_6_byte _pad3; // offset=8B, size=7B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AxisComSubscribe
         {
             public ZApplication_AxisComBaseFunctionSubscribe Base; // offset=0B, size=4B   - < command basic axis functions like enable/disable or stop which every axis should have implemented 
-            // union in C# have issues with marshaling
             public ZApplication_AxisComHomingSubscribe Homing; // offset=4B, size=1B   - < command a homing procedure of the axis  
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)] public byte[] _pad0;
+            public Array_0_2_byte _pad0; // offset=5B, size=3B 
             public ZApplication_AxisComVelocitySubscribe Velocity; // offset=8B, size=16B   - < command a velocity controlled movement of an axis if available or allowed 
             public ZApplication_AxisComPositionSubscribe Position; // offset=24B, size=72B   - < command a position controlled movement of an axis if available of possible 
         };
@@ -213,7 +295,6 @@ namespace PLC
         public struct ZApplication_ActuatorDigitalComSubscribe
         {
             public byte MovePlus; // offset=0B, size=1B  - < moves the actuator into the plus direction on a rising edge 
-            // union in C# have issues with marshaling
             public byte MoveMinus; // offset=1B, size=1B  - < moves the actuator into the minus direction on a rising edge 
         };
          
@@ -221,7 +302,6 @@ namespace PLC
         public struct ZApplication_DigitalComSubscribe
         {
             public byte Write; // offset=0B, size=1B 
-            // union in C# have issues with marshaling
             public byte Enable; // offset=1B, size=1B 
         };
          
@@ -229,7 +309,6 @@ namespace PLC
         public struct QuickstartComSubscribeEquipment
         {
             public ZApplication_AxisComSubscribe TransportX; // offset=0B, size=96B 
-            // union in C# have issues with marshaling
             public ZApplication_ActuatorDigitalComSubscribe CylinderY; // offset=96B, size=2B 
             public ZApplication_DigitalComSubscribe MagnetOn; // offset=98B, size=2B 
             public ZApplication_DigitalComSubscribe LimitSwitchLeft; // offset=100B, size=2B 
@@ -239,15 +318,14 @@ namespace PLC
             public ZApplication_DigitalComSubscribe CylinderYIsUp; // offset=108B, size=2B 
             public ZApplication_DigitalComSubscribe CylinderYMoveDown; // offset=110B, size=2B 
             public ZApplication_DigitalComSubscribe CylinderYMoveUp; // offset=112B, size=2B 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)] public byte[] _pad0;
+            public Array_0_5_byte _pad0; // offset=14B, size=6B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct QuickstartComSubscribe
         {
             public QuickstartComRequest Request; // offset=0B, size=3B 
-            // union in C# have issues with marshaling
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)] public byte[] _pad0;
+            public Array_0_4_byte _pad0; // offset=3B, size=5B 
             public QuickstartComSubscribeEquipment Equipment; // offset=8B, size=120B   -  contains booleans that are used to start a specific sequence. 
         };
          
@@ -255,7 +333,6 @@ namespace PLC
         public struct QuickstartCom
         {
             public QuickstartComPublish Publish; // offset=0B, size=2928B 
-            // union in C# have issues with marshaling
             public QuickstartComSubscribe Subscribe; // offset=2928B, size=128B 
         };
          
@@ -263,41 +340,36 @@ namespace PLC
         public struct ZAux_LogEntry
         {
             public ulong TimeStamp; // offset=0B, size=8B  - < Unix timestamp of the running PLC target in 1ms resolution 
-            // union in C# have issues with marshaling
             public String256 Text; // offset=8B, size=256B  - < Message as string 
             public PLC.Enums.ZCore_LogLevel LogLevel; // offset=264B, size=2B   - < LogLevel based on [Apache log4j](https://logging.apache.org/log4j/2.x/log4j-api/apidocs/index.html) 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)] public byte[] _pad0;
+            public Array_0_5_byte _pad0; // offset=33B, size=6B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AlarmingMessageCom
         {
             public ZAux_LogEntry Extend; // offset=0B, size=272B 
-            // union in C# have issues with marshaling
             public String256 Source; // offset=272B, size=256B  - < source of the alarm, usually this is the name of a unit 
             public PLC.Enums.ZApplication_AlarmingState State; // offset=528B, size=2B   - < acknowledement state of an alarm. If acknowledment is required this can be done via [AlarmingComPublish](xref:ZApplication.AlarmingComPublish) 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)] public byte[] _pad0;
+            public Array_0_5_byte _pad0; // offset=66B, size=6B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AlarmingComPublish
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)] public ZApplication_AlarmingMessageCom[] Buffer;
-            // union in C# have issues with marshaling
+            public Array_0_10_ZApplication_AlarmingMessageCom Buffer; // offset=0B, size=5896B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AlarmingAcknowledge
         {
             public byte Acknowledge; // offset=0B, size=1B  - < set to true to acknowledge the alarm 
-            // union in C# have issues with marshaling
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZApplication_AlarmingComSubscribe
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)] public ZApplication_AlarmingAcknowledge[] Buffer;
-            // union in C# have issues with marshaling
+            public Array_0_10_ZApplication_AlarmingAcknowledge Buffer; // offset=0B, size=11B   - < acknowledge an individual alarm, The index of the array has to match the index in [AlarmingComPublish](xref:ZApplication.AlarmingComPublish) 
             public byte Clear; // offset=11B, size=1B  - < set to true to remove all acknowledged messages 
         };
          
@@ -305,9 +377,8 @@ namespace PLC
         public struct ZApplication_AlarmingCom
         {
             public ZApplication_AlarmingComPublish Publish; // offset=0B, size=5896B   - < contains status information of alarms, which can be read 
-            // union in C# have issues with marshaling
             public ZApplication_AlarmingComSubscribe Subscribe; // offset=5896B, size=12B   - < controls the alarming szstem, e.g. acknowledge alarms via a HMI 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] _pad0;
+            public Array_0_3_byte _pad0; // offset=738B, size=4B 
         };
         
     }
