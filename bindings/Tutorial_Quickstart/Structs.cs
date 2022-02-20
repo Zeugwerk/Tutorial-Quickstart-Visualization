@@ -144,13 +144,13 @@ namespace PLC
             public byte IsDriveEnabled; // offset=167B, size=1B  - < is the drive controlling the axis, e.g. the motor has power applied to it 
             public byte IsParked; // offset=168B, size=1B  - < is the axis disabled by software 
             public Array_0_6_byte _pad0; // offset=169B, size=7B 
-            public double ActPosition; // offset=176B, size=8B  - < actual position of the axis, may be 0 if the axis doesn't support positioning 
-            public double ActFollowingError; // offset=184B, size=8B  - < actual following error, which is the deviation between the profile-generator's nominal values from ActPosition 
-            public double ActVelocity; // offset=192B, size=8B  - < actual velocity 
-            public double ActCurrent; // offset=200B, size=8B  -  actual current in percent 
-            public short DecimalPlacesPosition; // offset=208B, size=2B  - < number of significant digits for ActPosition and ActFollowingError 
-            public short DecimalPlacesVelocity; // offset=210B, size=2B  - < number of significant digits for ActVelocity 
-            public short DecimalPlacesCurrent; // offset=212B, size=2B  - < number of significant digits for ActCurrent 
+            public double ActualPosition; // offset=176B, size=8B  - < actual position of the axis, may be 0 if the axis doesn't support positioning 
+            public double ActualFollowingError; // offset=184B, size=8B  - < actual following error, which is the deviation between the profile-generator's nominal values from ActualPosition 
+            public double ActualVelocity; // offset=192B, size=8B  - < actual velocity 
+            public double ActualCurrent; // offset=200B, size=8B  -  actual current in percent 
+            public short DecimalPlacesPosition; // offset=208B, size=2B  - < number of significant digits for ActualPosition and ActualFollowingError 
+            public short DecimalPlacesVelocity; // offset=210B, size=2B  - < number of significant digits for ActualVelocity 
+            public short DecimalPlacesCurrent; // offset=212B, size=2B  - < number of significant digits for ActualCurrent 
             public Array_0_1_byte _pad1; // offset=26B, size=2B 
         };
          

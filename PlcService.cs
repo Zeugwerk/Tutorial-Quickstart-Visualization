@@ -166,7 +166,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			
 			var colorOff = new Color(202.0f/255.0f,208.0f/255.0f,222.0f/255.0f);
 			var colorOn = new Color(218.0f/255.0f,119.0f/255.0f,109.0f/255.0f);			
-			GetNode<Label>("../GUI/Equipment/lbPosition").Text = string.Format("Position: {0:0.000}", status.Equipment.TransportX.Base.ActPosition);
+			GetNode<Label>("../GUI/Equipment/lbPosition").Text = string.Format("Position: {0:0.000}", status.Equipment.TransportX.Base.ActualPosition);
 			GetNode<ColorRect>("../GUI/Equipment/crTransport").Color = status.Equipment.TransportX.Base.IsDriveEnabled > 0 ? colorOn : colorOff;
 			GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.IsEnabled > 0 ? colorOn : colorOff;
 			GetNode<ColorRect>("../GUI/Equipment/crConveyor").Color = status.Equipment.ConveyorOn.IsEnabled > 0 ? colorOn : colorOff;
@@ -184,7 +184,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 
 			// transport axis
 			CSGBox transportX = GetNode("bxRail").GetNode<CSGBox>("bxTransportX");
-			transportX.Translation = new Vector3((float)status.Equipment.TransportX.Base.ActPosition, transportX.Translation.y, transportX.Translation.z);
+			transportX.Translation = new Vector3((float)status.Equipment.TransportX.Base.ActualPosition, transportX.Translation.y, transportX.Translation.z);
 
 			// vertical cylinder
 			var cylinderY = transportX.GetNode<RigidBody>("rbCylinderY");

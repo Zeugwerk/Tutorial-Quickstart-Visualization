@@ -1289,10 +1289,10 @@ namespace PLC
                 this.IsDriveEnabled = new PLC.Mirror.Primitive<byte>($"{instancePath}.IsDriveEnabled", adsClient);
                 this.IsParked = new PLC.Mirror.Primitive<byte>($"{instancePath}.IsParked", adsClient);
                 
-                this.ActPosition = new PLC.Mirror.Primitive<double>($"{instancePath}.ActPosition", adsClient);
-                this.ActFollowingError = new PLC.Mirror.Primitive<double>($"{instancePath}.ActFollowingError", adsClient);
-                this.ActVelocity = new PLC.Mirror.Primitive<double>($"{instancePath}.ActVelocity", adsClient);
-                this.ActCurrent = new PLC.Mirror.Primitive<double>($"{instancePath}.ActCurrent", adsClient);
+                this.ActualPosition = new PLC.Mirror.Primitive<double>($"{instancePath}.ActualPosition", adsClient);
+                this.ActualFollowingError = new PLC.Mirror.Primitive<double>($"{instancePath}.ActualFollowingError", adsClient);
+                this.ActualVelocity = new PLC.Mirror.Primitive<double>($"{instancePath}.ActualVelocity", adsClient);
+                this.ActualCurrent = new PLC.Mirror.Primitive<double>($"{instancePath}.ActualCurrent", adsClient);
                 this.DecimalPlacesPosition = new PLC.Mirror.Primitive<short>($"{instancePath}.DecimalPlacesPosition", adsClient);
                 this.DecimalPlacesVelocity = new PLC.Mirror.Primitive<short>($"{instancePath}.DecimalPlacesVelocity", adsClient);
                 this.DecimalPlacesCurrent = new PLC.Mirror.Primitive<short>($"{instancePath}.DecimalPlacesCurrent", adsClient);
@@ -1371,10 +1371,10 @@ namespace PLC
                   IsDrivePowered.Value = _value.IsDrivePowered;
                   IsDriveEnabled.Value = _value.IsDriveEnabled;
                   IsParked.Value = _value.IsParked;
-                  ActPosition.Value = _value.ActPosition;
-                  ActFollowingError.Value = _value.ActFollowingError;
-                  ActVelocity.Value = _value.ActVelocity;
-                  ActCurrent.Value = _value.ActCurrent;
+                  ActualPosition.Value = _value.ActualPosition;
+                  ActualFollowingError.Value = _value.ActualFollowingError;
+                  ActualVelocity.Value = _value.ActualVelocity;
+                  ActualCurrent.Value = _value.ActualCurrent;
                   DecimalPlacesPosition.Value = _value.DecimalPlacesPosition;
                   DecimalPlacesVelocity.Value = _value.DecimalPlacesVelocity;
                   DecimalPlacesCurrent.Value = _value.DecimalPlacesCurrent;
@@ -1405,10 +1405,10 @@ namespace PLC
             public PLC.Mirror.Primitive<byte> IsDriveEnabled { get; }
             public PLC.Mirror.Primitive<byte> IsParked { get; }
             
-            public PLC.Mirror.Primitive<double> ActPosition { get; }
-            public PLC.Mirror.Primitive<double> ActFollowingError { get; }
-            public PLC.Mirror.Primitive<double> ActVelocity { get; }
-            public PLC.Mirror.Primitive<double> ActCurrent { get; }
+            public PLC.Mirror.Primitive<double> ActualPosition { get; }
+            public PLC.Mirror.Primitive<double> ActualFollowingError { get; }
+            public PLC.Mirror.Primitive<double> ActualVelocity { get; }
+            public PLC.Mirror.Primitive<double> ActualCurrent { get; }
             public PLC.Mirror.Primitive<short> DecimalPlacesPosition { get; }
             public PLC.Mirror.Primitive<short> DecimalPlacesVelocity { get; }
             public PLC.Mirror.Primitive<short> DecimalPlacesCurrent { get; }
