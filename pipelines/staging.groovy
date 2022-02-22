@@ -24,7 +24,14 @@ pipeline {
               println "CopyArtifacts from ${b.getFullProjectName()}"
               copyArtifacts filter: 'bindings/Zeugwerk Quickstart/Classes.cs,bindings/Zeugwerk Quickstart/Enums.cs,bindings/Zeugwerk Quickstart/Structs.cs', projectName: b.getFullProjectName() as String, selector: upstream(), target: '.', flatten: true, optional: false 
             }
-          }          
+          }
+          
+          // write build information
+          def references = [:]
+          references.repositories = [:]
+          references.repositories["Tutorial_Quickstart_Visualization"] = git.GIT_COMMIT
+          writeJSON file: 'references.json', json: references, pretty: 2
+          archiveArtifacts artifacts: "references.json"          
         }
       }
     }
