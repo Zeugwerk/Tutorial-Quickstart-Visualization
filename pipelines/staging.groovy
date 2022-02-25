@@ -28,8 +28,7 @@ pipeline {
           
           // write build information
           def references = [:]
-          references.repositories = [:]
-          references.repositories["Tutorial_Quickstart_Visualization"] = git.GIT_COMMIT
+          references.revision = git.GIT_COMMIT
           writeJSON file: 'references.json', json: references, pretty: 2
           archiveArtifacts artifacts: "references.json"          
         }
