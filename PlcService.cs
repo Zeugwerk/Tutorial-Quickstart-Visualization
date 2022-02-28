@@ -189,9 +189,9 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			// vertical cylinder
 			var cylinderY = transportX.GetNode<RigidBody>("rbCylinderY");
 
-			if (status.Equipment.CylinderYMoveUp.IsEnabled == 0 && status.Equipment.CylinderYMoveDown.IsEnabled > 0)
+			if (status.Equipment.CylinderYUp.IsEnabled == 0 && status.Equipment.CylinderYDown.IsEnabled > 0)
 				cylinderY.GravityScale = 2;
-			else if (status.Equipment.CylinderYMoveUp.IsEnabled > 0 && status.Equipment.CylinderYMoveDown.IsEnabled == 0)
+			else if (status.Equipment.CylinderYUp.IsEnabled > 0 && status.Equipment.CylinderYDown.IsEnabled == 0)
 				cylinderY.GravityScale = -2;
 
 			// magnetic force on/off
