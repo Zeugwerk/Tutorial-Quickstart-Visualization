@@ -463,7 +463,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			_pressed = false;
 			try
 			{
-				_quickstart.Subscribe.Equipment.TransportX.Base.Sync = new PLC.Types.ZApplication_AxisComBaseFunctionSubscribe { Stop = 1 };
+				_quickstart.Subscribe.Equipment.TransportX.Base.Sync = new PLC.Types.ZApplication_AxisComBaseSubscribe { Stop = 1 };
 			}
 			catch (Exception ex)
 			{
