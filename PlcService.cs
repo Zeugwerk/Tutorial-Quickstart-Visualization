@@ -433,7 +433,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			_pressed = true;
 			try
 			{
-				_quickstart.Subscribe.Equipment.TransportX.Position.Sync = new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = -3.5, Speed = 0.1, MoveAbsolute1 = 1 };
+				_quickstart.Subscribe.Equipment.TransportX.Position.Sync = new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = -3.5, Speed = 0.7, MoveAbsolute1 = 1 };
 			}
 			catch (Exception ex)
 			{
@@ -448,7 +448,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 			_pressed = true;
 			try
 			{
-				_quickstart.Subscribe.Equipment.TransportX.Position.Sync = new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = 3.5, Speed = 0.1, MoveAbsolute1 = 1 };
+				_quickstart.Subscribe.Equipment.TransportX.Position.Sync = new PLC.Types.ZApplication_AxisComPositionSubscribe { Position1 = 3.5, Speed = 0.7, MoveAbsolute1 = 1 };
 			}
 			catch (Exception ex)
 			{
