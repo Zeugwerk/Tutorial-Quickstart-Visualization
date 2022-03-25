@@ -145,7 +145,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		// Alarming
 		var message = alarming.Buffer.data.Where(x => x.Extend.LogLevel > PLC.Enums.ZCore_LogLevel.Debug).OrderBy(x => x.Extend.LogLevel).FirstOrDefault();
 		if(message.State != PLC.Enums.ZApplication_AlarmingState.Undefined)
-			GetNode<Label>("../GUI/lbMessage").Text = $"[{(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(message.Extend.TimeStamp / 1000).ToLocalTime()}]\n[{message.State}] {message.Extend.Text.str}";
+			GetNode<Label>("../GUI/lbMessage").Text = $"[{(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(message.Extend.TimeStamp).ToLocalTime()}]\n[{message.State}] {message.Extend.Text.str}";
 		else
 			GetNode<Label>("../GUI/lbMessage").Text = "";
 			
