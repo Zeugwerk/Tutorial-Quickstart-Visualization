@@ -26,6 +26,7 @@ public class PlcService : Node
 		
 		try
 		{
+			
 			_ads = new TcAdsClient();
 
 			if(netId == "")
@@ -35,10 +36,11 @@ public class PlcService : Node
 
 			_quickstart = new PLC.Mirror.QuickstartCom("ZGlobal.Com.Unit.Quickstart", _ads);
 			_alarming = new PLC.Mirror.ZApplication_AlarmingCom("ZGlobal.Com.Alarming", _ads);
-			_quickstart.Subscribe.Equipment.LimitSwitchLeft.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 };
+			_quickstart.Subscribe.Equipment.LimitSwitchLeft.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 };	
 			_quickstart.Subscribe.Equipment.LimitSwitchRight.Sync = new PLC.Types.ZApplication_DigitalComSubscribe { Enable = 0, Write = 1 };
 
 			GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = false;
+			GD.Print($"Connected");
 		}
 		catch (Exception ex)
 		{
@@ -58,8 +60,8 @@ public class PlcService : Node
 
 		GetNode<ColorRect>("../MessageLayer/ErrorRect").Visible = _showException;
 		GetNode<Label>("../MessageLayer/ErrorRect/lblConnectionState").Text =
-			$@"Not connected to local PLC
-This application is designed to interface with the Zeugwerk Quickstart Tutorial.";
+			$@"Not connected to PLC.
+This application is designed to interface with the Zeugwerk-Quickstart Tutorial.";
 	}
 
 	// Called when the node enters the scene tree for the first time.git
@@ -138,6 +140,7 @@ This application is designed to interface with the Zeugwerk Quickstart Tutorial.
 		}
 		catch (Exception ex)
 		{
+			GD.Print("Incompatible PLC detected");
 			DisconnectPlc(ex);
 			return;
 		}

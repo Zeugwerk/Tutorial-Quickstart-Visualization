@@ -7,70 +7,16 @@ namespace PLC
     {
     
         // size = 2B
-        public enum ZEquipment_AxisMotionState : short
-        {
-            Standstill = 0,//  The axis is currently standing still or at least the drive is not actively trying to move the axis. The consideration of external forces is usually not considered here.
-            Accelerating = 1,//  The axis is accelerating towards the constant velocity phase. However, depending on the motion profile the latter phase may not be reachable, because of a jerk limit of acceleration limit.
-            Decelerating = 2,//  The axis is decelerating toward zero velocity (e.g. stillstand).
-            ConstantVelocity = 3//  The axis is moving with constant velocity, either endlessly or towards a target position. Depending on the motion profile, which is used for the movement this motion state may not be reached and instead Accelerating changes seamlessly to Decelerating.
-        };
-
-    
-        // size = 2B
-        public enum ZEquipment_AxisSafetyStateFlags : short
-        {
-            SafeTorqueOff = 1,//  STO: The power supply to the motor is cut by the drive. If the motor is in motion it will spin down in an uncontrolled way. As soon as the power os cut the motor can not produce torque also not for braking.
-            SafeStop1 = 2,//  SS1: The power supply to the motor is cut by the drive. If the motor is in motion it spins down in a "controlled" way. This is achieved by activating the STO only after a fixed duration or by controlling the standstill of the motor in a given window.
-            SafeStop2 = 4,//  SS2: The motor is held in position by the drive with a given torque or force. If the motor is in motion it spins down in a controlled way and once 0 velocity is reached the drive will try to keep to motor in position. The position of the motor is monitored. If it moves out of the predefined positon-monitoring window the power is cut by the drive by activating the safe-torque off feature.
-            SafeOperatingStop = 8,//  SOS: The drive monitors if the current position of the motor is held. If the motor moves out of this position, the drive cuts the power to it by activing the safe-torque off feature.
-            SafeLimitedSpeed = 16,//  SLS: The drive monitors if the velocity of the motor is below a predefined maximum velocity and can trigger a predefined error reaction of the speed gets above this level.
-            SafeSpeedMonitor = 32,//  SSM: The drive monitors if the velocity of the motor is below a predefined minimum velocity and can trigger a predefined error reaction of the speed gets underneath this level.
-            SafeSpeedRange = 64,//  SSR: Combintation of SafeLimitedSpeed (SLS) and SafeSpeedMonitor (SSM).
-            SafeLimitedPosition = 128,//  SLP: If this safety feature is active, the drive monitors if the motor is not moving out of predefined limits.
-            SafePosition = 256,//  SP: If this safety featurs is active, the drive is submitting position data redunantly, which can be used by a safety control system.
-            SafeDirectionPositive = 512,//  SDI: If this safety feature is active the drive is only allowed to move in the positive direction (in a safe way).
-            SafeDirectionNegative = 1024,//  SDI: If this safety feature is active the drive is only allowed to move in the negative direction (in a safe way). 
-            SafeBrakeControl = 2048,//  SBC: SafeBrakeControl is usually used together with the SafeBrakeTest (SBT). SBC is controlling one or more (external) to ensure that the load is not moving after a STO command. Usually SBC and SBT are cyclically enabled by the drive (if the feature is supported and activated) to ensure that the brake is still working as expected or if maintainance is required.
-            SafeBrakeTest = 4096
-        };
-
-    
-        // size = 2B
-        public enum ZCore_ObjectState : short
-        {
-            Booting = 0,// < after starting the PLC all objects are in its booting state and doing initialization stuff, this is represented by Booting
-            BootingError = 1,// < if something gets wrong in Booting state, the objects changes to BootingError
-            Idle = 2,// < after successfull boot phase, the object is in its idle state and ready for action
-            Busy = 3,// < in Busy state the object is doing its supposed work; this is signalized by [_obj.IsBusy()=TRUE](xref:ZCore.Object#IsBusy)
-            Error = 4// < if something gets wrong in Busy state, the object changes to error; this is signalized by [_obj.HasError()=TRUE](xref:ZCore.Object#HasError)
-        };
-
-    
-        // size = 2B
-        public enum ZApplication_IoType : short
-        {
-            Undefined = 0,
-            DigitalInput = 1,
-            DigitalOutput = 2,
-            AnalogInput = 3,
-            AnalogOutput = 4,
-            Light = 5,
-            PulsedOutput = 6,
-            DebouncedInput = 7,
-            Userdefined = 8
-        };
-
-    
-        // size = 2B
         public enum ZCore_LogLevel : short
         {
-            Trace = 0,// < *Zeugwerk Framework* diagnostic messages, this level is reserved for use libraries
-            Debug = 1,// < detailed information about key method parameters or other information that is useful for finding likely problems in specific 'problematic' areas of the code
-            Info = 2,// < diagnostic messages in production (step changes, method calls, ...)
-            Warning = 3,// < errors in sequences that are unusual, but the machine can deal with at least semi-automatically
-            Error = 4,// < sequence error that stop the machine from working properly (axes fault, actuator timeouts, invalid data ...)
-            Fatal = 5,// < hardware failures, booting sequence failures
-            Off = 6// < used to switch off log messages completely when setting a [log-level filter](xref:ZCore.ILogger#SetLevel)
+            Undefined = 0,// < unused, uninitialized
+            Trace = 1,// < *Zeugwerk Framework* diagnostic messages, this level is reserved for use libraries
+            Debug = 2,// < detailed information about key method parameters or other information that is useful for finding likely problems in specific 'problematic' areas of the code
+            Info = 3,// < diagnostic messages in production (step changes, method calls, ...)
+            Warning = 4,// < errors in sequences that are unusual, but the machine can deal with at least semi-automatically
+            Error = 5,// < sequence error that stop the machine from working properly (axes fault, actuator timeouts, invalid data ...)
+            Fatal = 6,// < hardware failures, booting sequence failures
+            Off = 7// < used to switch off log messages completely when setting a [log-level filter](xref:ZCore.ILogger#SetLevel)
         };
 
     
@@ -100,6 +46,51 @@ namespace PLC
             Stop = 8,// < Active state to stop the unit by executing the *stop sequence* 
             FaultReaction = 9,// < Active state to react to a fault which happens during idle state or *automatic sequence*. When the fault reaction is done, the unit is put into its fault state.
             Automatic = 10// < Active state which controls the actual process of the unit
+        };
+
+    
+        // size = 2B
+        public enum ZEquipment_AxisSafetyStateFlags : short
+        {
+            SafeStateOk = 0,//  No Safety State diagnosed, axis safe to use
+            SafeTorqueOff = 1,//  STO: The power supply to the motor is cut by the drive. If the motor is in motion it will spin down in an uncontrolled way. As soon as the power os cut the motor can not produce torque also not for braking.
+            SafeStop1 = 2,//  SS1: The power supply to the motor is cut by the drive. If the motor is in motion it spins down in a "controlled" way. This is achieved by activating the STO only after a fixed duration or by controlling the standstill of the motor in a given window.
+            SafeStop2 = 4,//  SS2: The motor is held in position by the drive with a given torque or force. If the motor is in motion it spins down in a controlled way and once 0 velocity is reached the drive will try to keep to motor in position. The position of the motor is monitored. If it moves out of the predefined positon-monitoring window the power is cut by the drive by activating the safe-torque off feature.
+            SafeOperatingStop = 8,//  SOS: The drive monitors if the current position of the motor is held. If the motor moves out of this position, the drive cuts the power to it by activing the safe-torque off feature.
+            SafeLimitedSpeed = 16,//  SLS: The drive monitors if the velocity of the motor is below a predefined maximum velocity and can trigger a predefined error reaction of the speed gets above this level.
+            SafeSpeedMonitor = 32,//  SSM: The drive monitors if the velocity of the motor is below a predefined minimum velocity and can trigger a predefined error reaction of the speed gets underneath this level.
+            SafeSpeedRange = 64,//  SSR: Combintation of SafeLimitedSpeed (SLS) and SafeSpeedMonitor (SSM).
+            SafeLimitedPosition = 128,//  SLP: If this safety feature is active, the drive monitors if the motor is not moving out of predefined limits.
+            SafePosition = 256,//  SP: If this safety featurs is active, the drive is submitting position data redunantly, which can be used by a safety control system.
+            SafeDirectionPositive = 512,//  SDI: If this safety feature is active the drive is only allowed to move in the positive direction (in a safe way).
+            SafeDirectionNegative = 1024,//  SDI: If this safety feature is active the drive is only allowed to move in the negative direction (in a safe way). 
+            SafeBrakeControl = 2048,//  SBC: SafeBrakeControl is usually used together with the SafeBrakeTest (SBT). SBC is controlling one or more (external) to ensure that the load is not moving after a STO command. Usually SBC and SBT are cyclically enabled by the drive (if the feature is supported and activated) to ensure that the brake is still working as expected or if maintainance is required.
+            SafeBrakeTest = 4096
+        };
+
+    
+        // size = 2B
+        public enum ZEquipment_AxisMotionState : short
+        {
+            Standstill = 0,//  The axis is currently standing still or at least the drive is not actively trying to move the axis. The consideration of external forces is usually not considered here.
+            Accelerating = 1,//  The axis is accelerating towards the constant velocity phase. However, depending on the motion profile the latter phase may not be reachable, because of a jerk limit of acceleration limit.
+            Decelerating = 2,//  The axis is decelerating toward zero velocity (e.g. stillstand).
+            ConstantVelocity = 3//  The axis is moving with constant velocity, either endlessly or towards a target position. Depending on the motion profile, which is used for the movement this motion state may not be reached and instead Accelerating changes seamlessly to Decelerating.
+        };
+
+    
+        // size = 2B
+        public enum ZApplication_IoType : short
+        {
+            Undefined = 0,
+            DigitalInput = 1,
+            DigitalOutput = 2,
+            AnalogInput = 3,
+            AnalogOutput = 4,
+            Light = 5,
+            PulsedOutput = 6,
+            DebouncedInput = 7,
+            Userdefined = 8
         };
 
     
