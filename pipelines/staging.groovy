@@ -9,7 +9,7 @@ pipeline {
   }
   
   triggers {
-    pollSCM 'H 5 * * *'
+    pollSCM '@monthly'
   }
   
   stages {
@@ -17,6 +17,10 @@ pipeline {
       steps {
         script {
           def git = checkout scm
+          
+          // increment version
+          env.version = increment_version fallback: '0.0.0.0'
+          currentBuild.displayName = env.version
           
           // get bindings from upstream if available
           dir("bindings/Tutorial_Quickstart") { 
@@ -47,4 +51,12 @@ pipeline {
       }
     }   
   }
+  
+  post {
+    success {
+      script {
+        tag_version()
+      }
+    }            
+  }      
 }
