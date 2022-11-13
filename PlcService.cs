@@ -170,9 +170,9 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 			var colorOff = new Color(202.0f/255.0f,208.0f/255.0f,222.0f/255.0f);
 			var colorOn = new Color(218.0f/255.0f,119.0f/255.0f,109.0f/255.0f);			
 			GetNode<Label>("../GUI/Equipment/lbPosition").Text = string.Format("Position: {0:0.000}", status.Equipment.TransportX.Base.ActualPosition);
-			GetNode<ColorRect>("../GUI/Equipment/crTransport").Color = status.Equipment.TransportX.Base.IsDriveEnabled > 0 ? colorOn : colorOff;
-			GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.IsEnabled > 0 ? colorOn : colorOff;
-			GetNode<ColorRect>("../GUI/Equipment/crConveyor").Color = status.Equipment.ConveyorOn.IsEnabled > 0 ? colorOn : colorOff;
+			GetNode<ColorRect>("../GUI/Equipment/crTransport").Color = status.Equipment.TransportX.Base.DriveEnabled > 0 ? colorOn : colorOff;
+			GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.Enabled > 0 ? colorOn : colorOff;
+			GetNode<ColorRect>("../GUI/Equipment/crConveyor").Color = status.Equipment.ConveyorOn.Enabled > 0 ? colorOn : colorOff;
 			
 			GetNode("stConveyor/Area").SetBlockSignals(status.State == PLC.Enums.ZApplication_UnitStateMachineState.GoHome);
 			if (status.State == PLC.Enums.ZApplication_UnitStateMachineState.Idle && _stateMem == PLC.Enums.ZApplication_UnitStateMachineState.GoHome)
@@ -182,7 +182,7 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 			label.Text = status.State.ToString();
 
 			// switch conveyor velocity on/off
-			conveyorStaticBody.ConstantLinearVelocity = new Vector3(status.Equipment.ConveyorOn.IsEnabled > 0 ? 1.5f : 0.0f, 0.0f, 0.0f);
+			conveyorStaticBody.ConstantLinearVelocity = new Vector3(status.Equipment.ConveyorOn.Enabled > 0 ? 1.5f : 0.0f, 0.0f, 0.0f);
 			_dt = 0;
 
 			// transport axis
@@ -192,13 +192,13 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 			// vertical cylinder
 			var cylinderY = transportX.GetNode<RigidBody>("rbCylinderY");
 
-			if (status.Equipment.CylinderYUp.IsEnabled == 0 && status.Equipment.CylinderYDown.IsEnabled > 0)
+			if (status.Equipment.CylinderYUp.Enabled == 0 && status.Equipment.CylinderYDown.Enabled > 0)
 				cylinderY.GravityScale = 2;
-			else if (status.Equipment.CylinderYUp.IsEnabled > 0 && status.Equipment.CylinderYDown.IsEnabled == 0)
+			else if (status.Equipment.CylinderYUp.Enabled > 0 && status.Equipment.CylinderYDown.Enabled == 0)
 				cylinderY.GravityScale = -2;
 
 			// magnetic force on/off
-			_magnetIsOn = status.Equipment.MagnetOn.IsEnabled > 0;
+			_magnetIsOn = status.Equipment.MagnetOn.Enabled > 0;
 			GetNode("stConveyor/Area").SetBlockSignals(true);
 			GetNode("Right").SetBlockSignals(true);
 			GetNode("Left").SetBlockSignals(true);
