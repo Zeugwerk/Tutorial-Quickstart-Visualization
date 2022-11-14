@@ -41,18 +41,20 @@ pipeline {
     
     stage('Build') {
       steps {
-        bat "nuget.exe restore"
-        dir('bin') { deleteDir() }
-        bat "mkdir bin"
-        
-        def ret = bat returnStdout: true, script: "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""
-        println ret
-        if(ret.contains("System.Exception: Failed to build project")) {
-           error "GODOT project had build errors!" 
-        }
-        
-        dir('bin') {
-          archiveArtifacts artifacts: 'Tutorial_Quickstart_Visualization.exe,Tutorial_Quickstart_Visualization.pck,data_Visualization/**/*'
+        script {
+          bat "nuget.exe restore"
+          dir('bin') { deleteDir() }
+          bat "mkdir bin"
+          
+          def ret = bat returnStdout: true, script: "Godot.exe --no-window --export \"Windows Desktop\" \"${WORKSPACE}\\bin\\Tutorial_Quickstart_Visualization.exe\""
+          println ret
+          if(ret.contains("System.Exception: Failed to build project")) {
+            error "GODOT project had build errors!" 
+          }
+          
+          dir('bin') {
+            archiveArtifacts artifacts: 'Tutorial_Quickstart_Visualization.exe,Tutorial_Quickstart_Visualization.pck,data_Visualization/**/*'
+          }
         }
       }
     }   
