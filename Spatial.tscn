@@ -484,7 +484,7 @@ __meta__ = {
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 152.0
-margin_bottom = 112.0
+margin_bottom = 102.0
 color = Color( 0, 0, 0, 0.588235 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -527,7 +527,7 @@ anchor_right = 1.0
 margin_left = -776.0
 margin_top = 16.0
 margin_right = -264.0
-margin_bottom = 104.0
+margin_bottom = 102.0
 rect_pivot_offset = Vector2( 66, 193 )
 color = Color( 0, 0, 0, 0.588235 )
 __meta__ = {
@@ -698,11 +698,11 @@ __meta__ = {
 [node name="Sequences" type="ColorRect" parent="GUI"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -248.0
+margin_left = -184.0
 margin_top = 16.0
 margin_right = -16.0
-margin_bottom = 88.0
-rect_pivot_offset = Vector2( 136, 104 )
+margin_bottom = 112.0
+rect_pivot_offset = Vector2( 96, 80 )
 color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -720,31 +720,41 @@ __meta__ = {
 }
 
 [node name="Start" type="Button" parent="GUI/Sequences"]
-margin_left = 8.0
+margin_left = 10.0
 margin_top = 32.0
-margin_right = 78.0
-margin_bottom = 62.0
+margin_right = 80.0
+margin_bottom = 56.0
 text = "Start"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Stop" type="Button" parent="GUI/Sequences"]
-margin_left = 80.0
+margin_left = 89.0
 margin_top = 32.0
-margin_right = 150.0
-margin_bottom = 62.0
+margin_right = 159.0
+margin_bottom = 56.0
 text = "Stop"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="GoHome" type="Button" parent="GUI/Sequences"]
-margin_left = 152.0
-margin_top = 32.0
-margin_right = 222.0
-margin_bottom = 62.0
+margin_left = 89.0
+margin_top = 64.0
+margin_right = 159.0
+margin_bottom = 88.0
 text = "GoHome"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Halt" type="Button" parent="GUI/Sequences"]
+margin_left = 10.0
+margin_top = 64.0
+margin_right = 80.0
+margin_bottom = 86.0
+text = "Halt"
 __meta__ = {
 "_edit_use_anchors_": false
 }

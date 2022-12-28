@@ -99,6 +99,7 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 		GetNode("../GUI/Sequences/Start").Connect("pressed", this, nameof(_start));
 		GetNode("../GUI/Sequences/Stop").Connect("pressed", this, nameof(_stop));
 		GetNode("../GUI/Sequences/GoHome").Connect("pressed", this, nameof(_gohome));
+		GetNode("../GUI/Sequences/Halt").Connect("pressed", this, nameof(_halt));		
 		GetNode("../GUI/Equipment/MoveUp").Connect("pressed", this, nameof(_moveup));
 		GetNode("../GUI/Equipment/MoveDown").Connect("pressed", this, nameof(_movedown));
 		GetNode("../GUI/Equipment/JogLeft").Connect("pressed", this, nameof(_jogTransportXLeft));
@@ -166,9 +167,10 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 		{
 			GetNode<Button>("../GUI/Sequences/Start").Disabled = status.Request.Start == 0;
 			GetNode<Button>("../GUI/Sequences/GoHome").Disabled = status.Request.GoHome == 0;
+			GetNode<Button>("../GUI/Sequences/Halt").Disabled = status.Request.Halt == 0;
 			
 			var colorOff = new Color(202.0f/255.0f,208.0f/255.0f,222.0f/255.0f);
-			var colorOn = new Color(218.0f/255.0f,119.0f/255.0f,109.0f/255.0f);			
+			var colorOn = new Color(218.0f/255.0f,119.0f/255.0f,109.0f/255.0f);	
 			GetNode<Label>("../GUI/Equipment/lbPosition").Text = string.Format("Position: {0:0.000}", status.Equipment.TransportX.Base.ActualPosition);
 			GetNode<ColorRect>("../GUI/Equipment/crTransport").Color = status.Equipment.TransportX.Base.DriveEnabled > 0 ? colorOn : colorOff;
 			GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.Enabled > 0 ? colorOn : colorOff;
@@ -510,6 +512,18 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 			DisconnectPlc(ex);
 		}
 	}
+	
+	public void _halt()
+	{
+		try
+		{
+			_quickstart.Subscribe.Request.Sync = new PLC.Types.QuickstartComRequest { Halt = 1 };
+		}
+		catch (Exception ex)
+		{
+			DisconnectPlc(ex);
+		}
+	}	
 	
 	public void _enteredMagnet(Area area)
 	{
