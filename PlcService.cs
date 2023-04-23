@@ -117,6 +117,14 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
+        if (_ads == null)
+			return;
+            
+	    // throttle plc read/write access
+		_dt += delta;
+		if (_dt < 0.03)
+		    return;
+		
 		GetNode<ColorRect>("../Overlay/ColorRect/crLeft").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<Area>("Left").GlobalTransform.origin);
 		GetNode<ColorRect>("../Overlay/ColorRect/crRight").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<Area>("Right").GlobalTransform.origin);
 		GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition = GetNode<Camera>("../ClippedCamera").UnprojectPosition(GetNode<StaticBody>("stConveyor").GlobalTransform.origin);
@@ -127,9 +135,6 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 		GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition.x - 60, GetNode<ColorRect>("../Overlay/ColorRect/crConveyor").RectPosition.y+30);
 		GetNode<ColorRect>("../Overlay/ColorRect/crTransport").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crTransport").RectPosition.x - 60, GetNode<ColorRect>("../Overlay/ColorRect/crTransport").RectPosition.y-60);
 		GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition = new Vector2(GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition.x - 60, GetNode<ColorRect>("../Overlay/ColorRect/crMagnet").RectPosition.y-30);
-
-		if (_ads == null)
-			return;
 				
 		// Read data from PLC
 		PLC.Types.QuickstartComPublish status;
@@ -160,108 +165,98 @@ This application is designed to interface with the Zeugwerk-Quickstart Tutorial.
 			var mat = conveyorStaticBody.GetNode<CSGBox>("CSGBox").Material as SpatialMaterial;
 			mat.Uv1Offset = new Vector3(0, mat.Uv1Offset.y + (1.5f * delta), 0);
 		}
+        
+        GetNode<Button>("../GUI/Sequences/Start").Disabled = status.Request.Start == 0;
+        GetNode<Button>("../GUI/Sequences/GoHome").Disabled = status.Request.GoHome == 0;
+        GetNode<Button>("../GUI/Sequences/Halt").Disabled = status.Request.Halt == 0;
+        
+        var colorOff = new Color(202.0f/255.0f,208.0f/255.0f,222.0f/255.0f);
+        var colorOn = new Color(218.0f/255.0f,119.0f/255.0f,109.0f/255.0f);	
+        GetNode<Label>("../GUI/Equipment/lbPosition").Text = string.Format("Position: {0:0.000}", status.Equipment.TransportX.Base.ActualPosition);
+        GetNode<ColorRect>("../GUI/Equipment/crTransport").Color = status.Equipment.TransportX.Base.DriveEnabled > 0 ? colorOn : colorOff;
+        GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.Enabled > 0 ? colorOn : colorOff;
+        GetNode<ColorRect>("../GUI/Equipment/crConveyor").Color = status.Equipment.ConveyorOn.Enabled > 0 ? colorOn : colorOff;
+        GetNode("stConveyor/Area").SetBlockSignals(status.State == PLC.Enums.ZApplication_UnitStateMachineState.GoHome);
+        if (status.State == PLC.Enums.ZApplication_UnitStateMachineState.Idle && _stateMem == PLC.Enums.ZApplication_UnitStateMachineState.GoHome)
+            _resetCube();
+            
+        var label = GetNode<Label>("../GUI/lblUnitState");
+        label.Text = status.State.ToString();
+        
+        // switch conveyor velocity on/off
+        conveyorStaticBody.ConstantLinearVelocity = new Vector3(status.Equipment.ConveyorOn.Enabled > 0 ? 1.5f : 0.0f, 0.0f, 0.0f);
+        _dt = 0;
+        
+        // transport axis
+        CSGBox transportX = GetNode("bxRail").GetNode<CSGBox>("bxTransportX");
+        transportX.Translation = new Vector3((float)status.Equipment.TransportX.Base.ActualPosition, transportX.Translation.y, transportX.Translation.z);
+        
+        // vertical cylinder
+        var cylinderY = transportX.GetNode<RigidBody>("rbCylinderY");
+        
+        if (status.Equipment.CylinderYUp.Enabled == 0 && status.Equipment.CylinderYDown.Enabled > 0)
+            cylinderY.GravityScale = 2;
+        else if (status.Equipment.CylinderYUp.Enabled > 0 && status.Equipment.CylinderYDown.Enabled == 0)
+            cylinderY.GravityScale = -2;
 
-		// throttle plc read/write access
-		_dt += delta;
-		if (_dt > 0.03)
-		{
-			GetNode<Button>("../GUI/Sequences/Start").Disabled = status.Request.Start == 0;
-			GetNode<Button>("../GUI/Sequences/GoHome").Disabled = status.Request.GoHome == 0;
-			GetNode<Button>("../GUI/Sequences/Halt").Disabled = status.Request.Halt == 0;
-			
-			var colorOff = new Color(202.0f/255.0f,208.0f/255.0f,222.0f/255.0f);
-			var colorOn = new Color(218.0f/255.0f,119.0f/255.0f,109.0f/255.0f);	
-			GetNode<Label>("../GUI/Equipment/lbPosition").Text = string.Format("Position: {0:0.000}", status.Equipment.TransportX.Base.ActualPosition);
-			GetNode<ColorRect>("../GUI/Equipment/crTransport").Color = status.Equipment.TransportX.Base.DriveEnabled > 0 ? colorOn : colorOff;
-			GetNode<ColorRect>("../GUI/Equipment/crMagnet").Color = status.Equipment.MagnetOn.Enabled > 0 ? colorOn : colorOff;
-			GetNode<ColorRect>("../GUI/Equipment/crConveyor").Color = status.Equipment.ConveyorOn.Enabled > 0 ? colorOn : colorOff;
-			
-			GetNode("stConveyor/Area").SetBlockSignals(status.State == PLC.Enums.ZApplication_UnitStateMachineState.GoHome);
-			if (status.State == PLC.Enums.ZApplication_UnitStateMachineState.Idle && _stateMem == PLC.Enums.ZApplication_UnitStateMachineState.GoHome)
-				_resetCube();
-
-			var label = GetNode<Label>("../GUI/lblUnitState");
-			label.Text = status.State.ToString();
-
-			// switch conveyor velocity on/off
-			conveyorStaticBody.ConstantLinearVelocity = new Vector3(status.Equipment.ConveyorOn.Enabled > 0 ? 1.5f : 0.0f, 0.0f, 0.0f);
-			_dt = 0;
-
-			// transport axis
-			CSGBox transportX = GetNode("bxRail").GetNode<CSGBox>("bxTransportX");
-			transportX.Translation = new Vector3((float)status.Equipment.TransportX.Base.ActualPosition, transportX.Translation.y, transportX.Translation.z);
-
-			// vertical cylinder
-			var cylinderY = transportX.GetNode<RigidBody>("rbCylinderY");
-
-			if (status.Equipment.CylinderYUp.Enabled == 0 && status.Equipment.CylinderYDown.Enabled > 0)
-				cylinderY.GravityScale = 2;
-			else if (status.Equipment.CylinderYUp.Enabled > 0 && status.Equipment.CylinderYDown.Enabled == 0)
-				cylinderY.GravityScale = -2;
-
-			// magnetic force on/off
-			_magnetIsOn = status.Equipment.MagnetOn.Enabled > 0;
-			GetNode("stConveyor/Area").SetBlockSignals(true);
-			GetNode("Right").SetBlockSignals(true);
-			GetNode("Left").SetBlockSignals(true);
-			GetNode("Left").SetBlockSignals(true);
-			_magnetArea.SetBlockSignals(true);
-			if (_magnetIsOn)
-			{
-				((SpatialMaterial)((CSGBox)_gripper).Material).EmissionEnabled = true;
-
-				if (_inMagnetZone)
-				{
-					if (_cube.Mode != RigidBody.ModeEnum.Static)
-					{
-						_cube.Mode = RigidBody.ModeEnum.Static;
-						cylinderY.CollisionMask = 0x1;
-
-						var cubeHeight = 0.5f;
-						var oldGlobal = _cube.GlobalTransform;
-						_cube.GetParent().RemoveChild(_cube);
-						_gripper.AddChild(_cube);
-						_cube.Translation = new Vector3(0, -0.5f * (cubeHeight + ((CSGBox)(_gripper)).Height), 0);
-						_cube.Rotation = new Vector3(0, 0, 0);
-
-						// Set Collision Geometry to gripper + cube
-						GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Translation 
-							= new Vector3(((CSGBox)(_gripper)).Translation.x, ((CSGBox)(_gripper)).Translation.y - 0.5f * cubeHeight, ((CSGBox)(_gripper)).Translation.z);
-						((BoxShape)(GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Shape)).Extents =
-							new Vector3(((CSGBox)(_gripper)).Width / 2, 0.5f * (((CSGBox)(_gripper)).Height + cubeHeight), ((CSGBox)(_gripper)).Depth / 2);
-					}
-				}
-			}
-			else
-			{
-				((SpatialMaterial)((CSGBox)_gripper).Material).EmissionEnabled = false;		
-
-				if (_cube.Mode != RigidBody.ModeEnum.Rigid)
-				{
-					_cube.Mode = RigidBody.ModeEnum.Rigid;
-					cylinderY.CollisionMask = 0x3;
-
-					var transform = _cube.GlobalTransform;
-					_cube.GetParent().RemoveChild(_cube);
-					AddChild(_cube);
-					_cube.AddCentralForce(new Vector3(0, 0, 0));
-					_cube.Transform = transform;
-					
-					// Set Collision Geometry to gripper
-					GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Translation = ((CSGBox)(_gripper)).Translation;
-					((BoxShape)(GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape")).Shape).Extents =
-						new Vector3(0.25f, 0.025f, 0.25f);
-				}
-			}
-			
-			GetNode("stConveyor/Area").SetBlockSignals(false);
-			GetNode("Right").SetBlockSignals(false);
-			GetNode("Left").SetBlockSignals(false);
-			GetNode("Left").SetBlockSignals(false);
-			_magnetArea.SetBlockSignals(false);
-
-			_stateMem = status.State;
-		}
+        // magnetic force on/off
+        _magnetIsOn = status.Equipment.MagnetOn.Enabled > 0;
+        GetNode("stConveyor/Area").SetBlockSignals(true);
+        GetNode("Right").SetBlockSignals(true);
+        GetNode("Left").SetBlockSignals(true);
+        GetNode("Left").SetBlockSignals(true);
+        _magnetArea.SetBlockSignals(true);
+        if (_magnetIsOn)
+        {
+            ((SpatialMaterial)((CSGBox)_gripper).Material).EmissionEnabled = true;
+            
+            if (_inMagnetZone)
+            {
+                if (_cube.Mode != RigidBody.ModeEnum.Static)
+                {
+                    _cube.Mode = RigidBody.ModeEnum.Static;
+                    cylinderY.CollisionMask = 0x1;
+                    
+                    var cubeHeight = 0.5f;
+                    var oldGlobal = _cube.GlobalTransform;
+                    _cube.GetParent().RemoveChild(_cube);
+                    _gripper.AddChild(_cube);
+                    _cube.Translation = new Vector3(0, -0.5f * (cubeHeight + ((CSGBox)(_gripper)).Height), 0);
+                    _cube.Rotation = new Vector3(0, 0, 0);
+                    
+                    // Set Collision Geometry to gripper + cube
+                    GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Translation = new Vector3(((CSGBox)(_gripper)).Translation.x, ((CSGBox)(_gripper)).Translation.y - 0.5f * cubeHeight, ((CSGBox)(_gripper)).Translation.z);
+                    ((BoxShape)(GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Shape)).Extents = new Vector3(((CSGBox)(_gripper)).Width / 2, 0.5f * (((CSGBox)(_gripper)).Height + cubeHeight), ((CSGBox)(_gripper)).Depth / 2);
+                }
+            }
+        }
+        else
+        {
+            ((SpatialMaterial)((CSGBox)_gripper).Material).EmissionEnabled = false;
+            
+            if (_cube.Mode != RigidBody.ModeEnum.Rigid)
+            {
+                _cube.Mode = RigidBody.ModeEnum.Rigid;
+                cylinderY.CollisionMask = 0x3;
+                
+                var transform = _cube.GlobalTransform;
+                _cube.GetParent().RemoveChild(_cube);
+                AddChild(_cube);
+                _cube.AddCentralForce(new Vector3(0, 0, 0));
+                _cube.Transform = transform;
+                
+                // Set Collision Geometry to gripper
+                GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape").Translation = ((CSGBox)(_gripper)).Translation;
+                ((BoxShape)(GetNode<CollisionShape>("bxRail/bxTransportX/rbCylinderY/GripperCollisionShape")).Shape).Extents = new Vector3(0.25f, 0.025f, 0.25f);
+            }
+        }
+        
+        GetNode("stConveyor/Area").SetBlockSignals(false);
+        GetNode("Right").SetBlockSignals(false);
+        GetNode("Left").SetBlockSignals(false);
+        GetNode("Left").SetBlockSignals(false);
+        _magnetArea.SetBlockSignals(false);
+        _stateMem = status.State;
 	}
 	
 	public void _resetCube_pressed()
