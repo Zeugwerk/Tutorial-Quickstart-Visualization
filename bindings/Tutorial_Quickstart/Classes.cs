@@ -96,108 +96,6 @@ namespace PLC
                 }
             }
         }
-        public class Array_0_10_ZApplication_AlarmingAcknowledge
-        {
-            public Array_0_10_ZApplication_AlarmingAcknowledge()
-            { }
-
-
-            public Array_0_10_ZApplication_AlarmingAcknowledge(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null){
-
-                _instancePath = instancePath;
-                _adsClient = adsClient;
-            }
-            
-            public class ValueChangedArgs : System.EventArgs
-            {
-                public Array_0_10_ZApplication_AlarmingAcknowledge Data { get; set; }
-            }               
-
-            
-
-            private TwinCAT.Ads.TcAdsClient _adsClient;
-            private int _notificationHandle;private string _instancePath = "";
-            private PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge _value;
-            private System.EventHandler<ValueChangedArgs> _callback;
-            
-            public System.EventHandler<ValueChangedArgs> ValueChanged
-            {
-                get
-                {
-                    if(_adsClient == null)
-                        return _callback;
-                        
-                    if(_notificationHandle == 0)
-                    {
-
-                        _notificationHandle = _adsClient.AddDeviceNotificationEx(_instancePath, AdsTransMode.Cyclic, 50, 100, this, _value.GetType());_adsClient.AdsNotification += ValueChangedCallback;
-                    }
-
-                    return _callback;
-                }
-                set
-                {
-                    _callback = value;
-                }
-            }
-
-            private void ValueChangedCallback(object sender, AdsNotificationEventArgs e)
-            {
-                if(_callback == null)
-                    return;
-                    
-                if(Object.ReferenceEquals(e.UserData, this))
-                {
-                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(_value));
-
-                    AdsBinaryReader reader = new AdsBinaryReader(e.DataStream);
-                    Marshal.Copy(reader.ReadBytes((int)e.DataStream.Length), 0, ptr, Marshal.SizeOf(_value));_value = Marshal.PtrToStructure<PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge>(ptr);
-                    Marshal.FreeHGlobal(ptr);
-                    _callback.Invoke(this, new ValueChangedArgs { Data = this });  ;
-                }
-            }            
-            
-
-            int Handle{
-                get
-                {
-                    if(_adsClient == null)
-                        return 0;
-                        
-                    return _adsClient.CreateVariableHandle(_instancePath);
-                }
-            }
-
-            public PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge Value
-            {
-                get
-                {
-                    return _value;
-                }
-                set
-                {
-                    _value = value;
-                }
-            }
-
-            public PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge Sync
-            {
-                get
-                {
-                    if(_adsClient == null)
-                        return _value;
-                        
-
-                    _value = (PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge)_adsClient.ReadAny(Handle, _value.GetType());
-                    return _value;
-                }
-                set
-                {
-                    _value = value;
-                    _adsClient.WriteAny(Handle, _value);
-                }
-            }
-        }
         public class Array_0_5_byte
         {
             public Array_0_5_byte()
@@ -504,13 +402,13 @@ namespace PLC
                 }
             }
         }
-        public class Array_0_10_ZApplication_AlarmingMessageCom
+        public class Array_0_2_byte
         {
-            public Array_0_10_ZApplication_AlarmingMessageCom()
+            public Array_0_2_byte()
             { }
 
 
-            public Array_0_10_ZApplication_AlarmingMessageCom(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null){
+            public Array_0_2_byte(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null){
 
                 _instancePath = instancePath;
                 _adsClient = adsClient;
@@ -518,14 +416,14 @@ namespace PLC
             
             public class ValueChangedArgs : System.EventArgs
             {
-                public Array_0_10_ZApplication_AlarmingMessageCom Data { get; set; }
+                public Array_0_2_byte Data { get; set; }
             }               
 
             
 
             private TwinCAT.Ads.TcAdsClient _adsClient;
             private int _notificationHandle;private string _instancePath = "";
-            private PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom _value;
+            private PLC.Types.Array_0_2_byte _value;
             private System.EventHandler<ValueChangedArgs> _callback;
             
             public System.EventHandler<ValueChangedArgs> ValueChanged
@@ -559,7 +457,7 @@ namespace PLC
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(_value));
 
                     AdsBinaryReader reader = new AdsBinaryReader(e.DataStream);
-                    Marshal.Copy(reader.ReadBytes((int)e.DataStream.Length), 0, ptr, Marshal.SizeOf(_value));_value = Marshal.PtrToStructure<PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom>(ptr);
+                    Marshal.Copy(reader.ReadBytes((int)e.DataStream.Length), 0, ptr, Marshal.SizeOf(_value));_value = Marshal.PtrToStructure<PLC.Types.Array_0_2_byte>(ptr);
                     Marshal.FreeHGlobal(ptr);
                     _callback.Invoke(this, new ValueChangedArgs { Data = this });  ;
                 }
@@ -576,7 +474,7 @@ namespace PLC
                 }
             }
 
-            public PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom Value
+            public PLC.Types.Array_0_2_byte Value
             {
                 get
                 {
@@ -588,7 +486,7 @@ namespace PLC
                 }
             }
 
-            public PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom Sync
+            public PLC.Types.Array_0_2_byte Sync
             {
                 get
                 {
@@ -596,7 +494,7 @@ namespace PLC
                         return _value;
                         
 
-                    _value = (PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom)_adsClient.ReadAny(Handle, _value.GetType());
+                    _value = (PLC.Types.Array_0_2_byte)_adsClient.ReadAny(Handle, _value.GetType());
                     return _value;
                 }
                 set
@@ -708,13 +606,13 @@ namespace PLC
                 }
             }
         }
-        public class Array_0_4_byte
+        public class Array_0_10_ZApplication_AlarmingMessageCom
         {
-            public Array_0_4_byte()
+            public Array_0_10_ZApplication_AlarmingMessageCom()
             { }
 
 
-            public Array_0_4_byte(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null){
+            public Array_0_10_ZApplication_AlarmingMessageCom(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null){
 
                 _instancePath = instancePath;
                 _adsClient = adsClient;
@@ -722,14 +620,14 @@ namespace PLC
             
             public class ValueChangedArgs : System.EventArgs
             {
-                public Array_0_4_byte Data { get; set; }
+                public Array_0_10_ZApplication_AlarmingMessageCom Data { get; set; }
             }               
 
             
 
             private TwinCAT.Ads.TcAdsClient _adsClient;
             private int _notificationHandle;private string _instancePath = "";
-            private PLC.Types.Array_0_4_byte _value;
+            private PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom _value;
             private System.EventHandler<ValueChangedArgs> _callback;
             
             public System.EventHandler<ValueChangedArgs> ValueChanged
@@ -763,7 +661,7 @@ namespace PLC
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(_value));
 
                     AdsBinaryReader reader = new AdsBinaryReader(e.DataStream);
-                    Marshal.Copy(reader.ReadBytes((int)e.DataStream.Length), 0, ptr, Marshal.SizeOf(_value));_value = Marshal.PtrToStructure<PLC.Types.Array_0_4_byte>(ptr);
+                    Marshal.Copy(reader.ReadBytes((int)e.DataStream.Length), 0, ptr, Marshal.SizeOf(_value));_value = Marshal.PtrToStructure<PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom>(ptr);
                     Marshal.FreeHGlobal(ptr);
                     _callback.Invoke(this, new ValueChangedArgs { Data = this });  ;
                 }
@@ -780,7 +678,7 @@ namespace PLC
                 }
             }
 
-            public PLC.Types.Array_0_4_byte Value
+            public PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom Value
             {
                 get
                 {
@@ -792,7 +690,7 @@ namespace PLC
                 }
             }
 
-            public PLC.Types.Array_0_4_byte Sync
+            public PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom Sync
             {
                 get
                 {
@@ -800,7 +698,7 @@ namespace PLC
                         return _value;
                         
 
-                    _value = (PLC.Types.Array_0_4_byte)_adsClient.ReadAny(Handle, _value.GetType());
+                    _value = (PLC.Types.Array_0_10_ZApplication_AlarmingMessageCom)_adsClient.ReadAny(Handle, _value.GetType());
                     return _value;
                 }
                 set
@@ -903,6 +801,108 @@ namespace PLC
                         
 
                     _value = (PLC.Types.Array_0_6_byte)_adsClient.ReadAny(Handle, _value.GetType());
+                    return _value;
+                }
+                set
+                {
+                    _value = value;
+                    _adsClient.WriteAny(Handle, _value);
+                }
+            }
+        }
+        public class Array_0_10_ZApplication_AlarmingAcknowledge
+        {
+            public Array_0_10_ZApplication_AlarmingAcknowledge()
+            { }
+
+
+            public Array_0_10_ZApplication_AlarmingAcknowledge(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null){
+
+                _instancePath = instancePath;
+                _adsClient = adsClient;
+            }
+            
+            public class ValueChangedArgs : System.EventArgs
+            {
+                public Array_0_10_ZApplication_AlarmingAcknowledge Data { get; set; }
+            }               
+
+            
+
+            private TwinCAT.Ads.TcAdsClient _adsClient;
+            private int _notificationHandle;private string _instancePath = "";
+            private PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge _value;
+            private System.EventHandler<ValueChangedArgs> _callback;
+            
+            public System.EventHandler<ValueChangedArgs> ValueChanged
+            {
+                get
+                {
+                    if(_adsClient == null)
+                        return _callback;
+                        
+                    if(_notificationHandle == 0)
+                    {
+
+                        _notificationHandle = _adsClient.AddDeviceNotificationEx(_instancePath, AdsTransMode.Cyclic, 50, 100, this, _value.GetType());_adsClient.AdsNotification += ValueChangedCallback;
+                    }
+
+                    return _callback;
+                }
+                set
+                {
+                    _callback = value;
+                }
+            }
+
+            private void ValueChangedCallback(object sender, AdsNotificationEventArgs e)
+            {
+                if(_callback == null)
+                    return;
+                    
+                if(Object.ReferenceEquals(e.UserData, this))
+                {
+                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(_value));
+
+                    AdsBinaryReader reader = new AdsBinaryReader(e.DataStream);
+                    Marshal.Copy(reader.ReadBytes((int)e.DataStream.Length), 0, ptr, Marshal.SizeOf(_value));_value = Marshal.PtrToStructure<PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge>(ptr);
+                    Marshal.FreeHGlobal(ptr);
+                    _callback.Invoke(this, new ValueChangedArgs { Data = this });  ;
+                }
+            }            
+            
+
+            int Handle{
+                get
+                {
+                    if(_adsClient == null)
+                        return 0;
+                        
+                    return _adsClient.CreateVariableHandle(_instancePath);
+                }
+            }
+
+            public PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge Value
+            {
+                get
+                {
+                    return _value;
+                }
+                set
+                {
+                    _value = value;
+                }
+            }
+
+            public PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge Sync
+            {
+                get
+                {
+                    if(_adsClient == null)
+                        return _value;
+                        
+
+                    _value = (PLC.Types.Array_0_10_ZApplication_AlarmingAcknowledge)_adsClient.ReadAny(Handle, _value.GetType());
                     return _value;
                 }
                 set
@@ -1831,7 +1831,9 @@ namespace PLC
                 this.Start = new PLC.Mirror.Primitive<byte>("", null);
                 this.Stop = new PLC.Mirror.Primitive<byte>("", null);
                 this.GoHome = new PLC.Mirror.Primitive<byte>("", null);
-                this.Halt = new PLC.Mirror.Primitive<byte>("", null);            
+                this.Halt = new PLC.Mirror.Primitive<byte>("", null);
+                this.MoveTransportXThrice = new PLC.Mirror.Primitive<byte>("", null);
+                this.MoveBrieflyUpAction = new PLC.Mirror.Primitive<byte>("", null);            
             }        
 
 
@@ -1840,6 +1842,8 @@ namespace PLC
                 this.Stop = new PLC.Mirror.Primitive<byte>($"{instancePath}.Stop", adsClient);
                 this.GoHome = new PLC.Mirror.Primitive<byte>($"{instancePath}.GoHome", adsClient);
                 this.Halt = new PLC.Mirror.Primitive<byte>($"{instancePath}.Halt", adsClient);
+                this.MoveTransportXThrice = new PLC.Mirror.Primitive<byte>($"{instancePath}.MoveTransportXThrice", adsClient);
+                this.MoveBrieflyUpAction = new PLC.Mirror.Primitive<byte>($"{instancePath}.MoveBrieflyUpAction", adsClient);
             
               Value = d;
               _instancePath = instancePath;
@@ -1918,6 +1922,8 @@ namespace PLC
                   Stop.Value = _value.Stop;
                   GoHome.Value = _value.GoHome;
                   Halt.Value = _value.Halt;
+                  MoveTransportXThrice.Value = _value.MoveTransportXThrice;
+                  MoveBrieflyUpAction.Value = _value.MoveBrieflyUpAction;
                 }
             }
 
@@ -1943,6 +1949,8 @@ namespace PLC
             public PLC.Mirror.Primitive<byte> Stop { get; set;  }
             public PLC.Mirror.Primitive<byte> GoHome { get; set;  }
             public PLC.Mirror.Primitive<byte> Halt { get; set;  }
+            public PLC.Mirror.Primitive<byte> MoveTransportXThrice { get; set;  }
+            public PLC.Mirror.Primitive<byte> MoveBrieflyUpAction { get; set;  }
         }
          
         public class ZApplication_AxisComBase
@@ -2169,10 +2177,13 @@ namespace PLC
             {
                 this.Extend = new PLC.Mirror.ZApplication_AxisComBase("", null, new PLC.Types.ZApplication_AxisComBase());
                 this.Name = new PLC.Mirror.String81("", null);
+                this.Busy = new PLC.Mirror.Primitive<byte>("", null);
+                this.Error = new PLC.Mirror.Primitive<byte>("", null);
                 this.Manufacturer = new PLC.Mirror.String81("", null);
                 this.Simulated = new PLC.Mirror.Primitive<byte>("", null);
                 this.SafetyState = new PLC.Mirror.Primitive<PLC.Enums.ZEquipment_AxisSafetyStateFlags>("", null);
                 this.MotionState = new PLC.Mirror.Primitive<PLC.Enums.ZEquipment_AxisMotionState>("", null);
+                this.DriveState = new PLC.Mirror.String256("", null);
                 this.DrivePowered = new PLC.Mirror.Primitive<byte>("", null);
                 this.DriveEnabled = new PLC.Mirror.Primitive<byte>("", null);
                 this.Parked = new PLC.Mirror.Primitive<byte>("", null);
@@ -2191,10 +2202,13 @@ namespace PLC
             public ZApplication_AxisComBasePublish(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null, PLC.Types.ZApplication_AxisComBasePublish d = new PLC.Types.ZApplication_AxisComBasePublish()){
                 this.Extend = new PLC.Mirror.ZApplication_AxisComBase($"{instancePath}.Extend", adsClient, d.Extend);
                 this.Name = new PLC.Mirror.String81($"{instancePath}.Name", adsClient);
+                this.Busy = new PLC.Mirror.Primitive<byte>($"{instancePath}.Busy", adsClient);
+                this.Error = new PLC.Mirror.Primitive<byte>($"{instancePath}.Error", adsClient);
                 this.Manufacturer = new PLC.Mirror.String81($"{instancePath}.Manufacturer", adsClient);
                 this.Simulated = new PLC.Mirror.Primitive<byte>($"{instancePath}.Simulated", adsClient);
                 this.SafetyState = new PLC.Mirror.Primitive<PLC.Enums.ZEquipment_AxisSafetyStateFlags>($"{instancePath}.SafetyState", adsClient);
                 this.MotionState = new PLC.Mirror.Primitive<PLC.Enums.ZEquipment_AxisMotionState>($"{instancePath}.MotionState", adsClient);
+                this.DriveState = new PLC.Mirror.String256($"{instancePath}.DriveState", adsClient);
                 this.DrivePowered = new PLC.Mirror.Primitive<byte>($"{instancePath}.DrivePowered", adsClient);
                 this.DriveEnabled = new PLC.Mirror.Primitive<byte>($"{instancePath}.DriveEnabled", adsClient);
                 this.Parked = new PLC.Mirror.Primitive<byte>($"{instancePath}.Parked", adsClient);
@@ -2284,11 +2298,15 @@ namespace PLC
                   Extend.Value = _value.Extend;
                   
                       Name.Value = _value.Name.str;
+                  Busy.Value = _value.Busy;
+                  Error.Value = _value.Error;
                   
                       Manufacturer.Value = _value.Manufacturer.str;
                   Simulated.Value = _value.Simulated;
                   SafetyState.Value = _value.SafetyState;
                   MotionState.Value = _value.MotionState;
+                  
+                      DriveState.Value = _value.DriveState.str;
                   DrivePowered.Value = _value.DrivePowered;
                   DriveEnabled.Value = _value.DriveEnabled;
                   Parked.Value = _value.Parked;
@@ -2322,12 +2340,15 @@ namespace PLC
             }
             public PLC.Mirror.ZApplication_AxisComBase Extend { get; set;  }
             public PLC.Mirror.String81 Name { get; set;  }
+            public PLC.Mirror.Primitive<byte> Busy { get; set;  }
+            public PLC.Mirror.Primitive<byte> Error { get; set;  }
             public PLC.Mirror.String81 Manufacturer { get; set;  }
             public PLC.Mirror.Primitive<byte> Simulated { get; set;  }
             
                   public PLC.Mirror.Primitive<PLC.Enums.ZEquipment_AxisSafetyStateFlags> SafetyState { get; set;  }
             
                   public PLC.Mirror.Primitive<PLC.Enums.ZEquipment_AxisMotionState> MotionState { get; set;  }
+            public PLC.Mirror.String256 DriveState { get; set;  }
             public PLC.Mirror.Primitive<byte> DrivePowered { get; set;  }
             public PLC.Mirror.Primitive<byte> DriveEnabled { get; set;  }
             public PLC.Mirror.Primitive<byte> Parked { get; set;  }
@@ -3463,7 +3484,6 @@ namespace PLC
             {
                 this.State = new PLC.Mirror.Primitive<PLC.Enums.ZApplication_UnitStateMachineState>("", null);
                 this.Request = new PLC.Mirror.QuickstartComRequest("", null, new PLC.Types.QuickstartComRequest());
-                
                 this.Equipment = new PLC.Mirror.QuickstartComPublishEquipment("", null, new PLC.Types.QuickstartComPublishEquipment());            
             }        
 
@@ -3471,7 +3491,6 @@ namespace PLC
             public QuickstartComPublish(string instancePath, TwinCAT.Ads.TcAdsClient adsClient=null, PLC.Types.QuickstartComPublish d = new PLC.Types.QuickstartComPublish()){
                 this.State = new PLC.Mirror.Primitive<PLC.Enums.ZApplication_UnitStateMachineState>($"{instancePath}.State", adsClient);
                 this.Request = new PLC.Mirror.QuickstartComRequest($"{instancePath}.Request", adsClient, d.Request);
-                
                 this.Equipment = new PLC.Mirror.QuickstartComPublishEquipment($"{instancePath}.Equipment", adsClient, d.Equipment);
             
               Value = d;
@@ -3574,7 +3593,6 @@ namespace PLC
             
                   public PLC.Mirror.Primitive<PLC.Enums.ZApplication_UnitStateMachineState> State { get; set;  }
             public PLC.Mirror.QuickstartComRequest Request { get; set;  }
-            
             public PLC.Mirror.QuickstartComPublishEquipment Equipment { get; set;  }
         }
          

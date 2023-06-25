@@ -19,17 +19,6 @@ namespace PLC
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 81)]
             public string str;
         }
-        public struct Array_0_10_ZApplication_AlarmingAcknowledge
-        {
-            public ZApplication_AlarmingAcknowledge this[int key]
-            {
-                get => data[key - 0];
-                set => data[key - 0] = value;
-            }
-
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
-            public ZApplication_AlarmingAcknowledge[] data;
-        }
         public struct Array_0_5_byte
         {
             public byte this[int key]
@@ -63,16 +52,16 @@ namespace PLC
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
             public byte[] data;
         }
-        public struct Array_0_10_ZApplication_AlarmingMessageCom
+        public struct Array_0_2_byte
         {
-            public ZApplication_AlarmingMessageCom this[int key]
+            public byte this[int key]
             {
                 get => data[key - 0];
                 set => data[key - 0] = value;
             }
 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
-            public ZApplication_AlarmingMessageCom[] data;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+            public byte[] data;
         }
         public struct Array_0_3_byte
         {
@@ -85,16 +74,16 @@ namespace PLC
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             public byte[] data;
         }
-        public struct Array_0_4_byte
+        public struct Array_0_10_ZApplication_AlarmingMessageCom
         {
-            public byte this[int key]
+            public ZApplication_AlarmingMessageCom this[int key]
             {
                 get => data[key - 0];
                 set => data[key - 0] = value;
             }
 
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-            public byte[] data;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
+            public ZApplication_AlarmingMessageCom[] data;
         }
         public struct Array_0_6_byte
         {
@@ -106,6 +95,17 @@ namespace PLC
 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
             public byte[] data;
+        }
+        public struct Array_0_10_ZApplication_AlarmingAcknowledge
+        {
+            public ZApplication_AlarmingAcknowledge this[int key]
+            {
+                get => data[key - 0];
+                set => data[key - 0] = value;
+            }
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
+            public ZApplication_AlarmingAcknowledge[] data;
         } 
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct ZAux_Message
@@ -161,6 +161,8 @@ namespace PLC
             public byte Stop; // offset=1B, size=1B 
             public byte GoHome; // offset=2B, size=1B 
             public byte Halt; // offset=3B, size=1B 
+            public byte MoveTransportXThrice; // offset=4B, size=1B  - < Userdefined State to move TransportX three times to the right and then to the left 
+            public byte MoveBrieflyUpAction; // offset=5B, size=1B  - < Userdefined Action to move the CylinderY up briefly and the nmove it back to where it was 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -180,22 +182,25 @@ namespace PLC
         {
             public ZApplication_AxisComBase Extend; // offset=0B, size=1B 
             public String81 Name; // offset=1B, size=81B  - < axis name according to the PLC 
-            public String81 Manufacturer; // offset=82B, size=81B  - < refers to the axis object, which is used in the PLC to control the axis (i.e. AxisPlcOpenMc) 
-            public byte Simulated; // offset=163B, size=1B  - < is the axis running in simulated mode (usually via [AxisSimulatedImpl](xref:ZEquipment.AxisSimulatedImpl)) 
-            public PLC.Enums.ZEquipment_AxisSafetyStateFlags SafetyState; // offset=164B, size=2B   - < Is there a safety feature of the drive that is currently active? 
-            public PLC.Enums.ZEquipment_AxisMotionState MotionState; // offset=166B, size=2B   - < Motion phase of the current movement 
-            public byte DrivePowered; // offset=168B, size=1B  - < is high-power available? 
-            public byte DriveEnabled; // offset=169B, size=1B  - < is the drive controlling the axis, e.g. the motor has power applied to it 
-            public byte Parked; // offset=170B, size=1B  - < is the axis disabled by software 
-            public Array_0_4_byte _pad0; // offset=171B, size=5B 
-            public double ActualPosition; // offset=176B, size=8B  - < actual position of the axis, may be 0 if the axis doesn't support positioning 
-            public double ActualFollowingError; // offset=184B, size=8B  - < actual following error, which is the deviation between the profile-generator's nominal values from ActualPosition 
-            public double ActualVelocity; // offset=192B, size=8B  - < actual velocity 
-            public double ActualCurrent; // offset=200B, size=8B  -  actual current in percent 
-            public short DecimalPlacesPosition; // offset=208B, size=2B  - < number of significant digits for ActualPosition and ActualFollowingError 
-            public short DecimalPlacesVelocity; // offset=210B, size=2B  - < number of significant digits for ActualVelocity 
-            public short DecimalPlacesCurrent; // offset=212B, size=2B  - < number of significant digits for ActualCurrent 
-            public Array_0_1_byte _pad1; // offset=26B, size=2B 
+            public byte Busy; // offset=82B, size=1B  - < signals if the axis is busy or not 
+            public byte Error; // offset=83B, size=1B  - < signals if the axis is in error state or not 
+            public String81 Manufacturer; // offset=84B, size=81B  - < refers to the axis object, which is used in the PLC to control the axis (i.e. AxisPlcOpenMc) 
+            public byte Simulated; // offset=165B, size=1B  - < is the axis running in simulated mode (usually via [AxisSimulatedImpl](xref:ZEquipment.AxisSimulatedImpl)) 
+            public PLC.Enums.ZEquipment_AxisSafetyStateFlags SafetyState; // offset=166B, size=2B   - < Is there a safety feature of the drive that is currently active? 
+            public PLC.Enums.ZEquipment_AxisMotionState MotionState; // offset=168B, size=2B   - < Motion phase of the current movement 
+            public String256 DriveState; // offset=170B, size=256B 
+            public byte DrivePowered; // offset=426B, size=1B  - < is high-power available? 
+            public byte DriveEnabled; // offset=427B, size=1B  - < is the drive controlling the axis, e.g. the motor has power applied to it 
+            public byte Parked; // offset=428B, size=1B  - < is the axis disabled by software 
+            public Array_0_2_byte _pad0; // offset=429B, size=3B 
+            public double ActualPosition; // offset=432B, size=8B  - < actual position of the axis, may be 0 if the axis doesn't support positioning 
+            public double ActualFollowingError; // offset=440B, size=8B  - < actual following error, which is the deviation between the profile-generator's nominal values from ActualPosition 
+            public double ActualVelocity; // offset=448B, size=8B  - < actual velocity 
+            public double ActualCurrent; // offset=456B, size=8B  -  actual current in percent 
+            public short DecimalPlacesPosition; // offset=464B, size=2B  - < number of significant digits for ActualPosition and ActualFollowingError 
+            public short DecimalPlacesVelocity; // offset=466B, size=2B  - < number of significant digits for ActualVelocity 
+            public short DecimalPlacesCurrent; // offset=468B, size=2B  - < number of significant digits for ActualCurrent 
+            public Array_0_1_byte _pad1; // offset=58B, size=2B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -235,13 +240,13 @@ namespace PLC
         {
             public ZApplication_AxisComAbsolutePublish Absolute; // offset=0B, size=1B   - < Publishes actual values of [IAxisAbsolute](xref:ZEquipment.IAxisAbsolute) 
             public Array_0_6_byte _pad0; // offset=1B, size=7B 
-            public ZApplication_AxisComBasePublish Base; // offset=8B, size=216B   - < publishes standard axis status and data like name, if it is simulated, if it is enabled or not 
-            public ZApplication_AxisComBrakePublish Brake; // offset=224B, size=2B   - < Publishes actual values of [IAxisAbsolute](xref:ZEquipment.IAxisBrake) 
-            public ZApplication_AxisComHomingPublish Homing; // offset=226B, size=1B   - < currently not publishing anything but later needed for sure to show homing status and maybe homing config  
-            public ZApplication_AxisComCurrentPublish Current; // offset=227B, size=1B   - < publishes the actual needed current by the axis for controlling the actual action  
-            public ZApplication_AxisComVelocityPublish Velocity; // offset=228B, size=1B   - < publishes the actual velocity which the axis is currently running 
-            public ZApplication_AxisComPositionPublish Position; // offset=229B, size=2B   - < publishes the actual position, following error and the configured decimal places of the axis  
-            public Array_0_0_byte _pad1; // offset=28B, size=1B 
+            public ZApplication_AxisComBasePublish Base; // offset=8B, size=472B   - < publishes standard axis status and data like name, if it is simulated, if it is enabled or not 
+            public ZApplication_AxisComBrakePublish Brake; // offset=480B, size=2B   - < Publishes actual values of [IAxisAbsolute](xref:ZEquipment.IAxisBrake) 
+            public ZApplication_AxisComHomingPublish Homing; // offset=482B, size=1B   - < currently not publishing anything but later needed for sure to show homing status and maybe homing config  
+            public ZApplication_AxisComCurrentPublish Current; // offset=483B, size=1B   - < publishes the actual needed current by the axis for controlling the actual action  
+            public ZApplication_AxisComVelocityPublish Velocity; // offset=484B, size=1B   - < publishes the actual velocity which the axis is currently running 
+            public ZApplication_AxisComPositionPublish Position; // offset=485B, size=2B   - < publishes the actual position, following error and the configured decimal places of the axis  
+            public Array_0_0_byte _pad1; // offset=60B, size=1B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -273,25 +278,24 @@ namespace PLC
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct QuickstartComPublishEquipment
         {
-            public ZApplication_AxisComPublish TransportX; // offset=0B, size=232B 
-            public ZApplication_ActuatorDigitalComPublish CylinderY; // offset=232B, size=600B 
-            public ZApplication_DigitalComPublish CylinderYDown; // offset=832B, size=259B 
-            public ZApplication_DigitalComPublish CylinderYUp; // offset=1091B, size=259B 
-            public ZApplication_DigitalComPublish CylinderYIsDown; // offset=1350B, size=259B 
-            public ZApplication_DigitalComPublish CylinderYIsUp; // offset=1609B, size=259B 
-            public ZApplication_DigitalComPublish MagnetOn; // offset=1868B, size=259B 
-            public ZApplication_DigitalComPublish LimitSwitchLeft; // offset=2127B, size=259B 
-            public ZApplication_DigitalComPublish LimitSwitchRight; // offset=2386B, size=259B 
-            public ZApplication_DigitalComPublish ConveyorOn; // offset=2645B, size=259B 
+            public ZApplication_AxisComPublish TransportX; // offset=0B, size=488B 
+            public ZApplication_ActuatorDigitalComPublish CylinderY; // offset=488B, size=600B 
+            public ZApplication_DigitalComPublish CylinderYDown; // offset=1088B, size=259B 
+            public ZApplication_DigitalComPublish CylinderYUp; // offset=1347B, size=259B 
+            public ZApplication_DigitalComPublish CylinderYIsDown; // offset=1606B, size=259B 
+            public ZApplication_DigitalComPublish CylinderYIsUp; // offset=1865B, size=259B 
+            public ZApplication_DigitalComPublish MagnetOn; // offset=2124B, size=259B 
+            public ZApplication_DigitalComPublish LimitSwitchLeft; // offset=2383B, size=259B 
+            public ZApplication_DigitalComPublish LimitSwitchRight; // offset=2642B, size=259B 
+            public ZApplication_DigitalComPublish ConveyorOn; // offset=2901B, size=259B 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct QuickstartComPublish
         {
             public PLC.Enums.ZApplication_UnitStateMachineState State; // offset=0B, size=2B   - < state the unit is in 
-            public QuickstartComRequest Request; // offset=2B, size=4B   - < booleans that indictate which action is currently possible to perform with this unit 
-            public Array_0_1_byte _pad0; // offset=6B, size=2B 
-            public QuickstartComPublishEquipment Equipment; // offset=8B, size=2904B   - < structs for equipment objects which are used by the bridges 
+            public QuickstartComRequest Request; // offset=2B, size=6B   - < booleans that indictate which action is currently possible to perform with this unit 
+            public QuickstartComPublishEquipment Equipment; // offset=8B, size=3160B   - < structs for equipment objects which are used by the bridges 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
@@ -395,16 +399,16 @@ namespace PLC
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct QuickstartComSubscribe
         {
-            public QuickstartComRequest Request; // offset=0B, size=4B   - < contains booleans that are used to start a specific sequence. 
-            public Array_0_3_byte _pad0; // offset=4B, size=4B 
+            public QuickstartComRequest Request; // offset=0B, size=6B   - < contains booleans that are used to start a specific sequence. 
+            public Array_0_1_byte _pad0; // offset=6B, size=2B 
             public QuickstartComSubscribeEquipment Equipment; // offset=8B, size=136B   - < structs for equipment objects which are used by the bridges 
         };
          
         [StructLayout(LayoutKind.Sequential, Pack=8)]        
         public struct QuickstartCom
         {
-            public QuickstartComPublish Publish; // offset=0B, size=2912B 
-            public QuickstartComSubscribe Subscribe; // offset=2912B, size=144B 
+            public QuickstartComPublish Publish; // offset=0B, size=3168B 
+            public QuickstartComSubscribe Subscribe; // offset=3168B, size=144B 
         };
         
     }

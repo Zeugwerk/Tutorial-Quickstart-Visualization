@@ -46,7 +46,8 @@ namespace PLC
             Stop = 8,// < Active state to stop the unit by executing the *stop sequence* 
             FaultReaction = 9,// < Active state to react to a fault which happens during idle state or *automatic sequence*. When the fault reaction is done, the unit is put into its fault state.
             Automatic = 10,// < Active state which controls the actual process of the unit
-            Halt = 11// < Special state, which indicates that a previously active state currently reacts to a halt request, see [CancellationToken](xref:ZCore.CancellationToken)
+            Halt = 11,// < Special state, which indicates that a previously active state currently reacts to a halt request, see [CancellationToken](xref:ZCore.CancellationToken)
+            Halted = 12// < Special state, which indicates that a previously active state reacted successfully to a halt request, see [CancellationToken](xref:ZCore.CancellationToken) 
         };
 
     

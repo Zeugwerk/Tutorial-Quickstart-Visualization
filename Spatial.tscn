@@ -326,6 +326,7 @@ material = SubResource( 44 )
 anchor_right = 0.992
 anchor_bottom = 1.0
 margin_right = 8.19196
+rect_pivot_offset = Vector2( 952, 168 )
 color = Color( 1, 1, 1, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -470,7 +471,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -136.0
+margin_left = -174.0
 margin_top = -64.0
 margin_right = -16.0
 margin_bottom = -10.0
@@ -481,10 +482,10 @@ __meta__ = {
 }
 
 [node name="Game" type="ColorRect" parent="GUI"]
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 152.0
-margin_bottom = 102.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 144.0
+margin_bottom = 94.0
 color = Color( 0, 0, 0, 0.588235 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -524,10 +525,10 @@ __meta__ = {
 [node name="Equipment" type="ColorRect" parent="GUI"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -776.0
-margin_top = 16.0
-margin_right = -264.0
-margin_bottom = 102.0
+margin_left = -872.0
+margin_top = 8.0
+margin_right = -384.0
+margin_bottom = 94.0
 rect_pivot_offset = Vector2( 66, 193 )
 color = Color( 0, 0, 0, 0.588235 )
 __meta__ = {
@@ -535,40 +536,40 @@ __meta__ = {
 }
 
 [node name="MagnetOn" type="Button" parent="GUI/Equipment"]
-margin_left = 392.0
-margin_top = 32.0
-margin_right = 447.0
-margin_bottom = 52.0
+margin_left = 370.0
+margin_top = 30.0
+margin_right = 425.0
+margin_bottom = 50.0
 text = "On"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="MagnetOff" type="Button" parent="GUI/Equipment"]
-margin_left = 448.0
-margin_top = 32.0
-margin_right = 503.0
-margin_bottom = 52.0
+margin_left = 426.0
+margin_top = 30.0
+margin_right = 481.0
+margin_bottom = 50.0
 text = "Off"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ConveyorOn" type="Button" parent="GUI/Equipment"]
-margin_left = 392.0
-margin_top = 56.0
-margin_right = 447.0
-margin_bottom = 76.0
+margin_left = 370.0
+margin_top = 54.0
+margin_right = 425.0
+margin_bottom = 74.0
 text = "On"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ConveyorOff" type="Button" parent="GUI/Equipment"]
-margin_left = 448.0
-margin_top = 56.0
-margin_right = 503.0
-margin_bottom = 76.0
+margin_left = 426.0
+margin_top = 54.0
+margin_right = 481.0
+margin_bottom = 74.0
 text = "Off"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -606,9 +607,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="GUI/Equipment"]
-margin_left = 320.0
+margin_left = 306.0
 margin_top = 32.0
-margin_right = 375.0
+margin_right = 361.0
 margin_bottom = 46.0
 text = "Magnet"
 __meta__ = {
@@ -616,9 +617,9 @@ __meta__ = {
 }
 
 [node name="Label4" type="Label" parent="GUI/Equipment"]
-margin_left = 320.0
+margin_left = 306.0
 margin_top = 56.0
-margin_right = 379.0
+margin_right = 366.0
 margin_bottom = 70.0
 text = "Conveyor"
 __meta__ = {
@@ -669,18 +670,18 @@ __meta__ = {
 }
 
 [node name="crMagnet" type="ColorRect" parent="GUI/Equipment"]
-margin_left = 298.0
+margin_left = 288.0
 margin_top = 32.0
-margin_right = 312.0
+margin_right = 302.0
 margin_bottom = 46.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="crConveyor" type="ColorRect" parent="GUI/Equipment"]
-margin_left = 298.0
+margin_left = 288.0
 margin_top = 56.0
-margin_right = 312.0
+margin_right = 303.0
 margin_bottom = 70.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -698,10 +699,10 @@ __meta__ = {
 [node name="Sequences" type="ColorRect" parent="GUI"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -184.0
-margin_top = 16.0
-margin_right = -16.0
-margin_bottom = 112.0
+margin_left = -360.0
+margin_top = 8.0
+margin_right = -192.0
+margin_bottom = 104.0
 rect_pivot_offset = Vector2( 96, 80 )
 color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
 __meta__ = {
@@ -713,7 +714,7 @@ margin_left = 10.0
 margin_top = 7.0
 margin_right = 70.0
 margin_bottom = 21.0
-text = "Sequences"
+text = "Default sequences"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -766,8 +767,52 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -680.0
 margin_top = -64.0
-margin_right = -120.0
+margin_right = -184.0
 margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sequences2" type="ColorRect" parent="GUI"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -184.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 104.0
+rect_pivot_offset = Vector2( 96, 80 )
+color = Color( 0.164706, 0.2, 0.294118, 0.588235 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Transport2" type="Label" parent="GUI/Sequences2"]
+margin_left = 10.0
+margin_top = 7.0
+margin_right = 70.0
+margin_bottom = 21.0
+text = "Userdefined sequences"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MoveTransportXThrice" type="Button" parent="GUI/Sequences2"]
+margin_left = 8.0
+margin_top = 32.0
+margin_right = 170.0
+margin_bottom = 56.0
+text = "Move TransportX Thrice"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MoveBrieflyUpAction" type="Button" parent="GUI/Sequences2"]
+margin_left = 10.0
+margin_top = 64.0
+margin_right = 172.0
+margin_bottom = 88.0
+text = "Move Briefly Up Action"
 __meta__ = {
 "_edit_use_anchors_": false
 }
