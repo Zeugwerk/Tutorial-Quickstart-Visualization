@@ -744,7 +744,7 @@ __meta__ = {
 margin_left = 89.0
 margin_top = 64.0
 margin_right = 159.0
-margin_bottom = 88.0
+margin_bottom = 86.0
 text = "GoHome"
 __meta__ = {
 "_edit_use_anchors_": false
